@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://kckartik17.com/sitemap.xml
+Host: https://kckartik17.com
