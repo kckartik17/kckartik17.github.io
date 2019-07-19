@@ -8,7 +8,7 @@ module.exports = {
   siteLanguage: 'en_US',
   siteImage: 'https://kckartik.tk/og.png',
 
-  googleVerification: '',
+  googleVerification: '9ELzmYmH_F5ZMaB6lNCQpoFGFJVb7Xqa2iRTx2BSIUE',
 
   name: 'Kartik Chauhan',
   location: 'Gurgaon, Haryana',
@@ -54,7 +54,7 @@ module.exports = {
   ],
 
   twitterHandle: '@kckartik17',
-  googleAnalyticsID: '',
+  googleAnalyticsID: 'UA-144182921-1',
 
   navHeight: 100,
 
