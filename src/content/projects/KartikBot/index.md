@@ -13,4 +13,4 @@ tech:
 show: 'true'
 ---
 
-Tell about various software developer jobs across the globe. To use, follow the instruction given in the Github link.
+Tell about various software developer jobs across the globe. To use, follow the instructions given in the Github link.
