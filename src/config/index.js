@@ -6,6 +6,7 @@ module.exports = {
     'Kartik Chauhan, Kartik, Chauhan, kckartik17, software engineer, front-end engineer, web developer, javascript,flutter,dart,mobile app developer,express.js,gurugram,haryana,kartikchauhan,kckartik,node',
   siteUrl: 'https://kckartik.tk',
   siteLanguage: 'en_US',
+  siteImage: 'https://kckartik.tk/og.png',
 
   googleVerification: '',
 

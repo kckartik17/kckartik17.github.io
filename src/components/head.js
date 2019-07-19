@@ -34,7 +34,7 @@ const Head = ({ metadata }) => (
     <meta property="og:type" content="website" />
     <meta property="og:url" content={metadata.siteUrl} />
     <meta property="og:site_name" content={metadata.title} />
-    <meta property="og:image" content={`${config.siteUrl}${ogImage}`} />
+    <meta property="og:image" content={config.siteImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:type" content="image/png" />
