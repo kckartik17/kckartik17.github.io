@@ -2,8 +2,8 @@
 date: '5'
 title: 'StoryBook'
 cover: './storybook.png'
-github: 'https://github.com/kckartik17/MERN-App/'
-external: 'https://github.com/kckartik17/storybook/'
+github: 'https://github.com/kckartik17/storybook/'
+external: 'http://bit.ly/storybkapp'
 tech:
   - Express
   - Node.js

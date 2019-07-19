@@ -111,7 +111,7 @@ const FeaturedImg = styled(Img)`
     filter: grayscale(100%) contrast(1) brightness(80%);
   `};
 `;
-const ImgContainer = styled.div`
+const ImgContainer = styled.a`
   ${mixins.boxShadow};
   grid-column: 6 / -1;
   grid-row: 1 / -1;
@@ -259,7 +259,10 @@ const Featured = ({ data }) => {
                   </Links>
                 </ContentContainer>
 
-                <ImgContainer>
+                <ImgContainer
+                  href={external ? external : github ? github : '#'}
+                  target="_blank"
+                  rel="nofollow noopener noreferrer">
                   <FeaturedImg fluid={cover.childImageSharp.fluid} />
                 </ImgContainer>
               </Project>
