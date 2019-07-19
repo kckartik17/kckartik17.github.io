@@ -12,8 +12,8 @@ skills:
   - Python
 ---
 
-Hello! I'm Kartik, a software engineer based in Delhi & NCR who enjoys building things that live on the internet. I develop websites and mobile apps (both android & iOS) that provide intuitive, pixel-perfect user interfaces with efficient and modern backends.
+Hello! I'm Kartik, a software developer based in Gurugram, who enjoys building things that live on the internet. I develop websites and mobile apps (both android & iOS) that provide intuitive, pixel-perfect user interfaces with efficient and modern backends.
 
-I'm currently pursuing my B.Tech. degree in Computer Science & Engineering from [The Northcap University](https://www.ncuindia.edu/), Gurugram.
+I'm a final year student pursuing my B.Tech. degree in Computer Science & Engineering from [The Northcap University](https://www.ncuindia.edu/), Gurugram.
 
 Here's a few technologies I've been working with recently:

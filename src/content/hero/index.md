@@ -5,4 +5,4 @@ subtitle: 'I build things for the android, iOS and Web.'
 contactText: 'Get In Touch'
 ---
 
-I'm a software engineer based in Delhi & NCR, specializing in building exceptional, high-quality websites and mobile applications.
+I'm a software developer based in Gurugram, specializing in building exceptional, high-quality websites and mobile applications.

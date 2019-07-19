@@ -4,7 +4,7 @@ module.exports = {
     'Kartik Chauhan is a growing developer, always leans to learn and explore new things to solve problems. Like to work in teams at cool startups, building products and seeing them grow.',
   siteKeywords:
     'Kartik Chauhan, Kartik, Chauhan, kckartik17, software engineer, front-end engineer, web developer, javascript,fluter,dart,mobile app developer',
-  siteUrl: 'https://kckartik17.com',
+  siteUrl: 'https://kckartik.tk',
   siteLanguage: 'en_US',
 
   googleVerification: '',

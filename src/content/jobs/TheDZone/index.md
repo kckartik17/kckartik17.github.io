@@ -9,5 +9,5 @@ url: 'https://play.google.com/store/apps/dev?id=6781234941494828520'
 
 - Built an [app](https://play.google.com/store/apps/details?id=com.tdz.placement.engineers) that provides the details of technical, non-
   technical, consultancy and other core companies.
-- Developed a mobile app which contains detailed information
+- Developed a mobile [app](http://bit.ly/indianforce) which contains detailed information
   about Indian Armed Forces.
