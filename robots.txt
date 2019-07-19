@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://kckartik17.com/sitemap.xml
-Host: https://kckartik17.com
+Sitemap: https://kckartik.tk/sitemap.xml
+Host: https://kckartik.tk
