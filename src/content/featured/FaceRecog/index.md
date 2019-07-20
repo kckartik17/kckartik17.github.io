@@ -7,7 +7,7 @@ external: 'https://kartik-chauhan.herokuapp.com/'
 tech:
   - React
   - Node.js
-  - MongoDB
+  - PostgreSQL
 show: 'true'
 ---
 
