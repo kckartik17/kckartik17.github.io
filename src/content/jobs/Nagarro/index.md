@@ -7,7 +7,7 @@ range: 'June 2019 - June 2019'
 url: 'https://www.nagarro.com/en'
 ---
 
-- built a chatbot on the WhatsApp platform which shows
+- Built a chatbot on the WhatsApp platform which shows
   currently available jobs in the IT field all around the world as
   per your preferences like programming language and location.
 
