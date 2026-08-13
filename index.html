@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Notes Hub</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { box-sizing: border-box; }
+
+  :root {
+    --bg: #080b14;
+    --bg-gradient-1: #293e78;
+    --bg-gradient-2: #2a506f;
+    --bg-gradient-3: #47316d;
+    --glass: rgba(255, 255, 255, 0.08);
+    --glass-strong: rgba(255, 255, 255, 0.14);
+    --border: rgba(255, 255, 255, 0.24);
+    --text: #eef3ff;
+    --muted: #9aa7c7;
+    --accent: #4e7cff;
+    --easy: #23c77f;
+    --medium: #f7b955;
+    --hard: #ff6b7a;
+    --warn: #ff9f5d;
+  }
+
+  body[data-theme="light"] {
+    --bg: #e8eefc;
+    --bg-gradient-1: #b5ccff;
+    --bg-gradient-2: #a8daf9;
+    --bg-gradient-3: #d5c6ff;
+    --glass: rgba(255, 255, 255, 0.6);
+    --glass-strong: rgba(255, 255, 255, 0.82);
+    --border: rgba(255, 255, 255, 0.78);
+    --text: #18233e;
+    --muted: #516181;
+    --accent: #3f67e6;
+    --easy: #1f9e66;
+    --medium: #bf7a19;
+    --hard: #cf4c5d;
+  }
+
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(circle at 15% 15%, var(--bg-gradient-1) 0, transparent 35%),
+      radial-gradient(circle at 80% 0%, var(--bg-gradient-2) 0, transparent 35%),
+      radial-gradient(circle at 90% 85%, var(--bg-gradient-3) 0, transparent 32%),
+      var(--bg);
+    padding: 24px 16px 34px;
+    transition: background .35s ease, color .28s ease;
+    --mx: 0px;
+    --my: 0px;
+    position: relative;
+    overflow-x: hidden;
+    color-scheme: dark;
+  }
+
+  .bg-fx {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .blob {
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(20px);
+    opacity: 0.42;
+    will-change: transform;
+    transform: translate3d(calc(var(--mx) * 0.02), calc(var(--my) * 0.02), 0);
+    transition: opacity .3s ease;
+  }
+  .blob.one {
+    width: 320px;
+    height: 320px;
+    left: -90px;
+    top: -70px;
+    background: radial-gradient(circle at 30% 30%, #88a3ff, #4963ce 62%, transparent 90%);
+    animation: driftA 12s ease-in-out infinite alternate;
+  }
+  .blob.two {
+    width: 260px;
+    height: 260px;
+    right: 7%;
+    top: 16%;
+    background: radial-gradient(circle at 30% 30%, #9adfff, #3f96d6 65%, transparent 90%);
+    animation: driftB 14s ease-in-out infinite alternate;
+  }
+  .blob.three {
+    width: 340px;
+    height: 340px;
+    right: -90px;
+    bottom: -120px;
+    background: radial-gradient(circle at 30% 30%, #c8a6ff, #6f56d7 65%, transparent 90%);
+    animation: driftC 16s ease-in-out infinite alternate;
+  }
+
+  @keyframes driftA {
+    from { transform: translate3d(calc(var(--mx) * 0.03), calc(var(--my) * 0.03), 0); }
+    to   { transform: translate3d(calc(var(--mx) * -0.02), calc(var(--my) * -0.02), 0); }
+  }
+  @keyframes driftB {
+    from { transform: translate3d(calc(var(--mx) * -0.02), calc(var(--my) * 0.04), 0); }
+    to   { transform: translate3d(calc(var(--mx) * 0.03), calc(var(--my) * -0.01), 0); }
+  }
+  @keyframes driftC {
+    from { transform: translate3d(calc(var(--mx) * 0.015), calc(var(--my) * -0.03), 0); }
+    to   { transform: translate3d(calc(var(--mx) * -0.025), calc(var(--my) * 0.02), 0); }
+  }
+
+  .app {
+    width: min(1180px, 100%);
+    margin: 0 auto;
+    border-radius: 28px;
+    padding: 22px;
+    background: linear-gradient(140deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 80px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.28);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    animation: floatIn 520ms cubic-bezier(.2,.8,.2,1);
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(14px) scale(0.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .title {
+    margin: 0;
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .top-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .chip {
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.2);
+    font-size: 11px;
+    color: #d6e0ff;
+    white-space: nowrap;
+  }
+  body[data-theme="light"] .chip { color: #2a3a5f; }
+
+  .btn {
+    border: 1px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.12);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: transform .16s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.45);
+  }
+  .theme-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ffd45f, #ff9e43 55%, #915cff);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.18) inset;
+  }
+
+  .row {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .row.stats {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .row.widgets {
+    grid-template-columns: 1.2fr 1fr 1fr;
+  }
+  .row.filters {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: linear-gradient(130deg, rgba(255,255,255,0.13), rgba(255,255,255,0.06));
+    padding: 12px;
+  }
+  .card-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .value {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .value.easy { color: var(--easy); }
+  .value.medium { color: var(--medium); }
+  .value.warn { color: var(--warn); }
+
+  .ring-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ring {
+    --pct: 0%;
+    width: 52px;
+    height: 52px;
+    border-radius: 999px;
+    background: conic-gradient(var(--easy) var(--pct), rgba(255,255,255,0.15) 0);
+    display: grid;
+    place-items: center;
+  }
+  .ring::after {
+    content: "";
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.35);
+  }
+  body[data-theme="light"] .ring::after { background: rgba(255,255,255,0.85); }
+  .ring-label b { display: block; font-size: 16px; }
+  .ring-label span { color: var(--muted); font-size: 12px; }
+
+  .search-wrap { position: relative; margin-bottom: 8px; }
+  .search-wrap svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: #b8c5e7;
+    pointer-events: none;
+  }
+  #search {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.09);
+    color: var(--text);
+    font-size: 15px;
+    padding: 13px 14px 13px 42px;
+    outline: none;
+    transition: border-color .22s ease, box-shadow .22s ease, background .22s ease;
+  }
+  #search::placeholder { color: #adc0ee; opacity: 0.85; }
+  #search:focus {
+    border-color: rgba(107, 151, 255, 0.8);
+    box-shadow: 0 0 0 4px rgba(86, 135, 255, 0.25);
+    background: rgba(255,255,255,0.12);
+  }
+  .search-meta {
+    min-height: 18px;
+    color: var(--muted);
+    font-size: 12px;
+    margin: 4px 2px 0;
+  }
+  .search-dropdown {
+    margin-top: 6px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    background: rgba(10,14,28,0.76);
+    backdrop-filter: blur(16px);
+    max-height: 260px;
+    overflow: auto;
+    display: none;
+  }
+  body[data-theme="light"] .search-dropdown { background: rgba(255,255,255,0.88); }
+  .search-dropdown.show { display: block; }
+  .search-item {
+    width: 100%;
+    text-align: left;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 9px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .search-item:last-child { border-bottom: 0; }
+  .search-item:hover,
+  .search-item.active { background: rgba(255,255,255,0.1); }
+  .search-item span { font-size: 13px; }
+
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .filter-chip {
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.24);
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    font-size: 12px;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: transform .14s ease, border-color .14s ease, background .14s ease;
+  }
+  .filter-chip:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.4); }
+  .filter-chip.active {
+    background: rgba(78,124,255,0.28);
+    border-color: rgba(120,155,255,0.75);
+  }
+  .filters-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .utility-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .utility-row .btn { font-size: 11px; padding: 7px 11px; }
+
+  .tabs {
+    display: inline-flex;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 14px;
+    padding: 5px;
+    margin-bottom: 12px;
+  }
+  .tab-btn {
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #c2d0f2;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 9px 14px;
+    cursor: pointer;
+    transition: transform .16s ease, color .16s ease, background .16s ease, box-shadow .16s ease;
+  }
+  .tab-btn:hover { color: #eef3ff; transform: translateY(-1px); }
+  .tab-btn.active {
+    background: linear-gradient(135deg, rgba(95,138,255,0.85), rgba(78,124,255,0.7));
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(50,95,212,0.35);
+  }
+  .panel { display: none; animation: fadeIn .22s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .pinned-wrap { margin-bottom: 12px; }
+  .pinned-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 8px;
+  }
+
+  .cat-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .sort-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  select, .sort-wrap input[type="checkbox"] {
+    accent-color: var(--accent);
+  }
+  select.sort-select {
+    border: 1px solid rgba(255,255,255,0.26);
+    background: rgba(255,255,255,0.1);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+  select.sort-select option {
+    background: #1a2236;
+    color: #eaf1ff;
+  }
+
+  .category {
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.06);
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: transform .2s ease, border-color .2s ease;
+  }
+  .category:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.35); }
+  .cat-header {
+    width: 100%;
+    border: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: transparent;
+    color: #eef3ff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+  }
+  .category-name { display: inline-flex; align-items: center; gap: 8px; }
+  .cat-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(78,124,255,0.22);
+    border: 1px solid rgba(122,156,255,0.4);
+    font-size: 13px;
+  }
+  .chevron { width: 18px; height: 18px; color: #a9bced; transition: transform .22s ease; }
+  .category.open .chevron { transform: rotate(90deg); }
+  .cat-count {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    color: #d7e5ff;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 999px;
+    padding: 4px 9px;
+  }
+  .cat-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  .category.open .cat-body { max-height: 1200px; }
+  .cat-body ul { margin: 0; list-style: none; padding: 0 12px 12px; }
+
+  .problem-card {
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.06);
+    margin-top: 8px;
+    padding: 10px;
+    transition: transform .16s ease, background .16s ease, border-color .16s ease;
+  }
+  .problem-card:hover {
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.13);
+    border-color: rgba(255,255,255,0.35);
+  }
+  .problem-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .num {
+    min-width: 34px;
+    height: 28px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(78,124,255,0.26);
+    color: #dbe7ff;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .pname {
+    flex: 1;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .summary-tip {
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.3);
+    font-size: 10px;
+    color: #cfe0ff;
+    cursor: help;
+  }
+  .diff {
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    letter-spacing: .2px;
+  }
+  .diff-easy { color: #d7ffee; background: rgba(35,199,127,0.22); border-color: rgba(35,199,127,0.5); }
+  .diff-medium { color: #fff1d6; background: rgba(247,185,85,0.2); border-color: rgba(247,185,85,0.52); }
+  .diff-hard { color: #ffe4e8; background: rgba(255,107,122,0.2); border-color: rgba(255,107,122,0.5); }
+
+  .problem-actions {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .mini {
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 8px;
+    cursor: pointer;
+  }
+  .mini:hover { background: rgba(255,255,255,0.18); }
+  .mini.status-done { border-color: rgba(35,199,127,0.5); color: #d2ffea; }
+  .mini.status-revision { border-color: rgba(247,185,85,0.6); color: #fff0cf; }
+  .mini.status-need_practice { border-color: rgba(255,159,93,0.6); color: #ffe4cd; }
+  .mini.pin.active { border-color: rgba(255,225,112,0.7); color: #ffe38f; }
+  .status-select {
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.1);
+    color: var(--text);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 9px;
+    min-height: 29px;
+    cursor: pointer;
+  }
+  .status-select:focus {
+    outline: none;
+    border-color: rgba(120,155,255,0.75);
+    box-shadow: 0 0 0 2px rgba(78,124,255,0.25);
+  }
+  .status-select.status-done { border-color: rgba(35,199,127,0.55); color: #d2ffea; }
+  .status-select.status-revision { border-color: rgba(247,185,85,0.65); color: #fff0cf; }
+  .status-select.status-need_practice { border-color: rgba(255,159,93,0.7); color: #ffe4cd; }
+  .status-select option {
+    background: #1a2236;
+    color: #eaf1ff;
+  }
+
+  .table-wrap {
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 16px;
+    overflow: auto;
+    background: rgba(255,255,255,0.05);
+  }
+  table { width: 100%; border-collapse: collapse; min-width: 720px; }
+  thead th {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    color: #c9d8fb;
+    padding: 11px 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.04);
+    cursor: pointer;
+    user-select: none;
+  }
+  thead th:hover { color: #ecf3ff; }
+  thead th.sorted { color: #fff; }
+  thead th .sort-arrow { margin-left: 4px; font-size: 10px; opacity: .7; }
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,0.08); }
+  tbody tr:last-child { border-bottom: 0; }
+  tbody tr:hover { background: rgba(255,255,255,0.08); }
+  tbody td { padding: 10px; font-size: 13px; color: #e5efff; }
+  tbody td a { color: #e5efff; text-decoration: none; font-weight: 600; }
+  tbody td a:hover { color: #fff; text-decoration: underline; }
+  .cat-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 4px 9px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #dce9ff;
+    background: rgba(78,124,255,0.2);
+    border: 1px solid rgba(117,151,255,0.42);
+  }
+
+  .roadmap-group {
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.06);
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .roadmap-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .roadmap-title {
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .roadmap-progress {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .roadmap-list {
+    display: grid;
+    gap: 6px;
+  }
+  .roadmap-item {
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .roadmap-item-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .heatmap {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-top: 6px;
+  }
+  .heat-cell {
+    height: 16px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.08);
+    position: relative;
+  }
+  .heat-cell[data-level="1"] { background: rgba(35,199,127,0.28); }
+  .heat-cell[data-level="2"] { background: rgba(35,199,127,0.44); }
+  .heat-cell[data-level="3"] { background: rgba(35,199,127,0.65); }
+  .heat-cell[data-level="4"] { background: rgba(35,199,127,0.82); }
+
+  .empty-state {
+    display: none;
+    text-align: center;
+    padding: 30px 12px 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .empty-state.show { display: block; }
+  .footer {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  body[data-theme="light"] .app {
+    box-shadow: 0 24px 70px rgba(71, 94, 152, 0.22), inset 0 1px 0 rgba(255,255,255,0.85);
+  }
+  body[data-theme="light"] .blob { opacity: 0.35; }
+  body[data-theme="light"] .tab-btn { color: #4f6187; }
+  body[data-theme="light"] .tab-btn:hover { color: #1c2e56; }
+  body[data-theme="light"] .tab-btn.active { color: #ffffff; }
+  body[data-theme="light"] .cat-header,
+  body[data-theme="light"] .pname,
+  body[data-theme="light"] tbody td,
+  body[data-theme="light"] tbody td a,
+  body[data-theme="light"] .roadmap-item-left { color: #1a2b50; }
+  body[data-theme="light"] .problem-card {
+    color: #1a2b50;
+    background: rgba(255,255,255,0.45);
+    border-color: rgba(96,126,196,0.28);
+  }
+  body[data-theme="light"] .problem-card:hover {
+    background: rgba(255,255,255,0.7);
+    border-color: rgba(86,118,194,0.45);
+  }
+  body[data-theme="light"] .num {
+    color: #1b2f61;
+    background: rgba(78,124,255,0.2);
+  }
+  body[data-theme="light"] thead th {
+    color: #355083;
+    background: rgba(255,255,255,0.62);
+    border-bottom-color: rgba(121,149,211,0.35);
+  }
+  body[data-theme="light"] thead th:hover,
+  body[data-theme="light"] thead th.sorted { color: #17305c; }
+  body[data-theme="light"] tbody tr:hover { background: rgba(118, 149, 230, 0.14); }
+  body[data-theme="light"] {
+    color-scheme: light;
+  }
+  body[data-theme="light"] select.sort-select option,
+  body[data-theme="light"] .status-select option {
+    background: #ffffff;
+    color: #1a2b50;
+  }
+
+  @media (max-width: 1000px) {
+    .row.stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .row.widgets { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 760px) {
+    .app { padding: 16px; border-radius: 20px; }
+    .top { flex-direction: column; align-items: flex-start; }
+    .top-right { width: 100%; justify-content: space-between; }
+    .tabs { width: 100%; }
+    .tab-btn { flex: 1; font-size: 12px; }
+    .row.stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+</head>
+<body>
+  <div class="bg-fx" aria-hidden="true">
+    <div class="blob one"></div>
+    <div class="blob two"></div>
+    <div class="blob three"></div>
+  </div>
+
+  <div class="app">
+    <div class="top">
+      <div>
+        <h1 class="title">DSA Notes Hub</h1>
+        <p class="subtitle">Shortcuts: <b>/</b> focus search, <b>↑/↓</b> navigate results, <b>Enter</b> open, <b>D</b> toggle theme.</p>
+      </div>
+      <div class="top-right">
+        <span class="chip">Glass Dashboard</span>
+        <span class="chip" id="sync-status">Local only</span>
+        <span class="chip" id="user-chip">Guest</span>
+        <button class="btn" id="sync-now-btn" type="button" title="Sync now">Sync now</button>
+        <button class="btn" id="auth-btn" type="button" title="Sign in with Google">Sign in</button>
+        <button class="btn" id="theme-toggle" type="button" aria-label="Toggle theme">
+          <span class="theme-dot" aria-hidden="true"></span>
+          <span id="theme-label">Dark mode</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="M20 20l-3-3"></path>
+      </svg>
+      <input type="search" id="search" placeholder="Search by problem, number, category, or difficulty..." autocomplete="off">
+      <div class="search-dropdown" id="search-dropdown"></div>
+    </div>
+    <div class="search-meta" id="search-meta"></div>
+
+    <div class="row stats" id="stats"></div>
+
+    <div class="row widgets">
+      <div class="card">
+        <div class="card-title">Progress</div>
+        <div class="ring-wrap">
+          <div class="ring" id="progress-ring"></div>
+          <div class="ring-label">
+            <b id="progress-text">0%</b>
+            <span id="progress-subtext">0 / 0 done</span>
+          </div>
+        </div>
+        <div class="chip-row" id="status-legend"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Recently Opened</div>
+        <div id="recent-list" style="display:grid;gap:6px;"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Activity & Streak</div>
+        <div style="font-size:13px;color:var(--muted);" id="last-studied">No activity yet.</div>
+        <div style="font-size:13px;margin-top:4px;" id="streak-text">Current streak: 0 days</div>
+        <div class="heatmap" id="heatmap"></div>
+      </div>
+    </div>
+
+    <div class="row filters">
+      <div class="card">
+        <div class="filters-head">
+          <div class="card-title" style="margin:0;">Filters</div>
+          <div class="utility-row" style="margin:0;">
+            <button class="btn" id="clear-filters" type="button">Clear filters</button>
+            <button class="btn" id="pick-random" type="button">Pick random</button>
+            <label class="btn" style="cursor:pointer;">
+              <input type="checkbox" id="random-need-practice" style="margin:0;">
+              Need practice only
+            </label>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);">Difficulty</div>
+        <div class="chip-row" id="difficulty-filters"></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;">Category</div>
+        <div class="chip-row" id="category-filters"></div>
+      </div>
+    </div>
+
+    <div class="utility-row">
+      <button class="btn" id="export-progress" type="button">Export progress</button>
+      <button class="btn" id="import-progress-btn" type="button">Import progress</button>
+      <input id="import-progress-input" type="file" accept="application/json" style="display:none;">
+      <button class="btn" id="reset-progress" type="button">Reset progress</button>
+      <button class="btn" id="sync-mode-btn" type="button" title="Realtime sync is always on">Realtime sync: On</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="categories">By Category</button>
+      <button class="tab-btn" data-tab="all">All Problems</button>
+      <button class="tab-btn" data-tab="roadmap">Roadmap</button>
+    </div>
+
+    <div class="panel active" id="panel-categories">
+      <div class="pinned-wrap">
+        <div class="cat-toolbar">
+          <div class="card-title" style="margin:0;">Pinned Problems</div>
+          <div class="sort-wrap">
+            <span>Sort by</span>
+            <select id="sort-select" class="sort-select">
+              <option value="num">Problem #</option>
+              <option value="difficulty">Difficulty</option>
+              <option value="status">Status</option>
+              <option value="last_opened">Last Opened</option>
+              <option value="name">Name</option>
+            </select>
+            <label style="display:inline-flex;align-items:center;gap:4px;">
+              <input type="checkbox" id="sort-desc">
+              Desc
+            </label>
+          </div>
+        </div>
+        <div class="pinned-grid" id="pinned-grid"></div>
+      </div>
+
+      <div class="cat-toolbar">
+        <div class="card-title" style="margin:0;">All Categories</div>
+        <div class="utility-row" style="margin:0;">
+          <button class="btn" id="expand-all" type="button">Expand all</button>
+          <button class="btn" id="collapse-all" type="button">Collapse all</button>
+        </div>
+      </div>
+      <div id="categories-root"></div>
+      <div class="empty-state" id="empty-categories">No problems match your search.</div>
+    </div>
+
+    <div class="panel" id="panel-all">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-sort="num">#<span class="sort-arrow">▲</span></th>
+              <th data-sort="name">Problem <span class="sort-arrow"></span></th>
+              <th data-sort="category">Category <span class="sort-arrow"></span></th>
+              <th data-sort="difficulty">Difficulty <span class="sort-arrow"></span></th>
+              <th data-sort="status">Status <span class="sort-arrow"></span></th>
+              <th data-sort="last_opened">Last Opened <span class="sort-arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="all-body"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="empty-all">No problems match your search.</div>
+    </div>
+
+    <div class="panel" id="panel-roadmap">
+      <div id="roadmap-root"></div>
+    </div>
+
+    <p class="footer">Tip: status workflow = Need Practice → Revision → Done.</p>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+<script>
+const STORAGE_KEY = "dsa_hub_state_v2";
+const FIREBASE_CONFIG = window.FIREBASE_CONFIG || {
+  apiKey: "AIzaSyD-JHWLs6MjeHAjNdDkZoDOODPqKPwxVuA",
+  authDomain: "dsa-notes-sync.firebaseapp.com",
+  projectId: "dsa-notes-sync",
+  storageBucket: "dsa-notes-sync.firebasestorage.app",
+  messagingSenderId: "523535793749",
+  appId: "1:523535793749:web:8816256bcfe6b5904d5edc",
+  measurementId: "G-EZC0NX5HN3"
+};
+const CLOUD_SCHEMA_VERSION = 2;
+
+const PROBLEMS = [
+  { num: 1, name: "Two Sum", slug: "two-sum", category: "Arrays & Hashing", difficulty: "Easy", summary: "Find two indices whose values add to target using one-pass hash map." },
+  { num: 33, name: "Search In Rotated Sorted Array", slug: "search-in-rotated-sorted-array", category: "Binary Search", difficulty: "Medium", summary: "Binary search on rotated sorted array without duplicates." },
+  { num: 81, name: "Search In Rotated Sorted Array II", slug: "search-in-rotated-sorted-array-ii", category: "Binary Search", difficulty: "Medium", summary: "Rotated binary search with duplicate handling via l++." },
+  { num: 200, name: "Number of Islands", slug: "number-of-islands", category: "Graphs", difficulty: "Medium", summary: "Count connected components in a grid using DFS/BFS/DSU." },
+  { num: 217, name: "Contains Duplicate", slug: "contains-duplicate", category: "Arrays & Hashing", difficulty: "Easy", summary: "Use hash set to detect repeated values in linear time." },
+  { num: 242, name: "Valid Anagram", slug: "valid-anagram", category: "Arrays & Hashing", difficulty: "Easy", summary: "Compare character frequencies (26-array or hash map)." }
+];
+
+const CATEGORY_ORDER = ["Arrays & Hashing", "Binary Search", "Graphs"];
+const CATEGORY_ICONS = {
+  "Arrays & Hashing": "🧩",
+  "Binary Search": "🎯",
+  "Graphs": "🕸️"
+};
+const STATUS_ORDER = ["need_practice", "revision", "done"];
+const STATUS_LABEL = {
+  need_practice: "Need Practice",
+  revision: "Revision",
+  done: "Done"
+};
+const STATUS_CLASS = {
+  need_practice: "status-need_practice",
+  revision: "status-revision",
+  done: "status-done"
+};
+
+let state = {
+  theme: "dark",
+  statuses: {},
+  pinned: [],
+  lastOpened: {},
+  activity: [],
+  updatedAtClient: 0,
+  autoSync: true
+};
+
+let firebaseReady = false;
+let firebaseAuth = null;
+let firebaseDb = null;
+let currentUser = null;
+let unsubscribeCloud = null;
+let cloudSaveTimer = null;
+let applyingCloudState = false;
+
+let searchQuery = "";
+let sortKey = "num";
+let sortDesc = false;
+let selectedDiff = new Set();
+let selectedCat = new Set();
+let searchNavIndex = -1;
+
+function href(slug) {
+  return slug + "-notes.html";
+}
+
+function categoryIcon(category) {
+  return CATEGORY_ICONS[category] || "📘";
+}
+
+function getProblem(slug) {
+  return PROBLEMS.find(p => p.slug === slug);
+}
+
+function getStatus(slug) {
+  return state.statuses[slug] || "need_practice";
+}
+
+function setStatus(slug, status) {
+  state.statuses[slug] = status;
+  saveState();
+  render();
+}
+
+function togglePin(slug) {
+  const i = state.pinned.indexOf(slug);
+  if (i >= 0) state.pinned.splice(i, 1);
+  else state.pinned.push(slug);
+  saveState();
+  render();
+}
+
+function recordOpen(slug) {
+  const now = Date.now();
+  state.lastOpened[slug] = now;
+  state.activity.push(now);
+  if (state.activity.length > 1000) state.activity = state.activity.slice(-1000);
+  saveState();
+}
+
+function openProblem(slug) {
+  recordOpen(slug);
+  window.location.href = href(slug);
+}
+
+function loadLocalState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return normalizeState(parsed);
+  } catch (e) {
+    console.error("Failed to load local state", e);
+    return null;
+  }
+}
+
+function saveLocalState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function normalizeState(raw) {
+  return {
+    theme: raw.theme === "light" ? "light" : "dark",
+    statuses: raw.statuses || {},
+    pinned: Array.isArray(raw.pinned) ? raw.pinned : [],
+    lastOpened: raw.lastOpened || {},
+    activity: Array.isArray(raw.activity) ? raw.activity : [],
+    updatedAtClient: Number(raw.updatedAtClient || 0),
+    autoSync: true
+  };
+}
+
+function saveState() {
+  state.updatedAtClient = Date.now();
+  saveLocalState();
+  queueCloudSave();
+}
+
+function setSyncStatus(text) {
+  const el = document.getElementById("sync-status");
+  if (el) el.textContent = text;
+}
+
+function isFirebaseConfigSet() {
+  if (!FIREBASE_CONFIG || typeof FIREBASE_CONFIG !== "object") return false;
+  const required = ["apiKey", "authDomain", "projectId", "appId"];
+  return required.every(key =>
+    FIREBASE_CONFIG[key] &&
+    !String(FIREBASE_CONFIG[key]).startsWith("YOUR_")
+  );
+}
+
+function mergeStates(localState, cloudState) {
+  if (!cloudState) return localState;
+  if (!localState) return cloudState;
+
+  const localTs = Number(localState.updatedAtClient || 0);
+  const cloudTs = Number(cloudState.updatedAtClient || 0);
+  const cloudNewer = cloudTs > localTs;
+  const primary = cloudNewer ? cloudState : localState;
+  const secondary = cloudNewer ? localState : cloudState;
+
+  const merged = normalizeState({
+    ...secondary,
+    ...primary,
+    statuses: { ...secondary.statuses, ...primary.statuses },
+    lastOpened: { ...secondary.lastOpened, ...primary.lastOpened },
+    activity: [...(secondary.activity || []), ...(primary.activity || [])]
+      .filter(v => Number.isFinite(v))
+      .sort((a, b) => a - b)
+      .slice(-1000),
+    pinned: Array.from(new Set([...(primary.pinned || []), ...(secondary.pinned || [])]))
+  });
+  merged.updatedAtClient = Math.max(localTs, cloudTs);
+  return merged;
+}
+
+function getCloudPayload() {
+  return {
+    theme: state.theme,
+    statuses: state.statuses,
+    pinned: state.pinned,
+    lastOpened: state.lastOpened,
+    activity: state.activity,
+    updatedAtClient: state.updatedAtClient || Date.now(),
+    schemaVersion: CLOUD_SCHEMA_VERSION,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+}
+
+async function loadCloudState(uid) {
+  if (!firebaseDb) return null;
+  const snap = await firebaseDb.collection("users").doc(uid).get();
+  if (!snap.exists) return null;
+  return normalizeState(snap.data() || {});
+}
+
+async function saveCloudState(uid) {
+  if (!firebaseDb || !uid) return;
+  await firebaseDb.collection("users").doc(uid).set(getCloudPayload(), { merge: true });
+}
+
+function queueCloudSave() {
+  if (!firebaseReady || !currentUser || applyingCloudState) return;
+  clearTimeout(cloudSaveTimer);
+  setSyncStatus("Syncing...");
+  cloudSaveTimer = setTimeout(async () => {
+    try {
+      await saveCloudState(currentUser.uid);
+      setSyncStatus("Synced");
+    } catch (e) {
+      console.error("Cloud sync failed", e);
+      setSyncStatus("Sync error");
+    }
+  }, 700);
+}
+
+function detachCloudListener() {
+  if (unsubscribeCloud) {
+    unsubscribeCloud();
+    unsubscribeCloud = null;
+  }
+}
+
+function updateAuthUI() {
+  const authBtn = document.getElementById("auth-btn");
+  const userChip = document.getElementById("user-chip");
+  const syncNowBtn = document.getElementById("sync-now-btn");
+  const modeBtn = document.getElementById("sync-mode-btn");
+
+  if (!firebaseReady) {
+    authBtn.textContent = "Firebase off";
+    authBtn.disabled = true;
+    syncNowBtn.disabled = true;
+    modeBtn.disabled = true;
+    userChip.textContent = "Guest";
+    return;
+  }
+
+  authBtn.disabled = false;
+  modeBtn.disabled = true;
+
+  if (currentUser) {
+    authBtn.textContent = "Sign out";
+    userChip.textContent = currentUser.email || "Signed in";
+    syncNowBtn.disabled = false;
+  } else {
+    authBtn.textContent = "Sign in";
+    userChip.textContent = "Guest";
+    syncNowBtn.disabled = true;
+  }
+
+  modeBtn.textContent = "Realtime sync: On";
+}
+
+async function attachCloudListener(uid) {
+  detachCloudListener();
+  unsubscribeCloud = firebaseDb.collection("users").doc(uid).onSnapshot((snap) => {
+    if (!snap.exists || !snap.data()) return;
+    const incoming = normalizeState(snap.data());
+    const localTs = Number(state.updatedAtClient || 0);
+    const remoteTs = Number(incoming.updatedAtClient || 0);
+    if (remoteTs <= localTs) return;
+
+    applyingCloudState = true;
+    state = mergeStates(state, incoming);
+    saveLocalState();
+    applyTheme(state.theme, false);
+    render();
+    applyingCloudState = false;
+    setSyncStatus("Synced");
+  }, (error) => {
+    console.error("Cloud listener error", error);
+    setSyncStatus("Sync error");
+  });
+}
+
+async function bootstrapCloudState(user) {
+  setSyncStatus("Syncing...");
+  try {
+    const cloud = await loadCloudState(user.uid);
+    if (!cloud) {
+      await saveCloudState(user.uid);
+      setSyncStatus("Synced");
+      return;
+    }
+    applyingCloudState = true;
+    state = mergeStates(state, cloud);
+    saveLocalState();
+    applyTheme(state.theme, false);
+    render();
+    applyingCloudState = false;
+    setSyncStatus("Synced");
+  } catch (e) {
+    console.error("Cloud bootstrap failed", e);
+    setSyncStatus("Sync error");
+  }
+}
+
+async function manualSyncNow() {
+  if (!firebaseReady || !currentUser) return;
+  setSyncStatus("Syncing...");
+  try {
+    await saveCloudState(currentUser.uid);
+    setSyncStatus("Synced");
+  } catch (e) {
+    console.error("Manual sync failed", e);
+    setSyncStatus("Sync error");
+  }
+}
+
+function initFirebase() {
+  if (!window.firebase || !isFirebaseConfigSet()) {
+    firebaseReady = false;
+    setSyncStatus("Local only");
+    updateAuthUI();
+    return;
+  }
+
+  try {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(FIREBASE_CONFIG);
+    }
+    firebaseAuth = firebase.auth();
+    firebaseDb = firebase.firestore();
+    firebaseReady = true;
+    setSyncStatus(navigator.onLine ? "Signed out" : "Offline");
+
+    firebaseAuth.onAuthStateChanged(async (user) => {
+      currentUser = user;
+      updateAuthUI();
+
+      if (!user) {
+        detachCloudListener();
+        setSyncStatus("Signed out");
+        return;
+      }
+
+      await bootstrapCloudState(user);
+      await attachCloudListener(user.uid);
+    });
+  } catch (e) {
+    console.error("Firebase init failed", e);
+    firebaseReady = false;
+    setSyncStatus("Firebase error");
+    updateAuthUI();
+  }
+}
+
+function applyTheme(theme, persist = true) {
+  state.theme = theme === "light" ? "light" : "dark";
+  document.body.setAttribute("data-theme", state.theme);
+  document.getElementById("theme-label").textContent = state.theme === "light" ? "Light mode" : "Dark mode";
+  if (persist) {
+    saveState();
+  }
+}
+
+function diffClass(difficulty) {
+  return "diff diff-" + difficulty.toLowerCase();
+}
+
+function statusRank(status) {
+  return STATUS_ORDER.indexOf(status);
+}
+
+function statusOptions(selectedStatus) {
+  return STATUS_ORDER.map(status => `
+    <option value="${status}" ${status === selectedStatus ? "selected" : ""}>
+      ${STATUS_LABEL[status]}
+    </option>
+  `).join("");
+}
+
+function matchesSearch(p, q) {
+  if (!q) return true;
+  const hay = [
+    p.num,
+    p.name,
+    p.category,
+    p.difficulty,
+    p.summary,
+    STATUS_LABEL[getStatus(p.slug)]
+  ].join(" ").toLowerCase();
+  return hay.includes(q);
+}
+
+function getFilteredProblems() {
+  const q = searchQuery.trim().toLowerCase();
+  return PROBLEMS.filter(p => {
+    if (!matchesSearch(p, q)) return false;
+    if (selectedDiff.size && !selectedDiff.has(p.difficulty)) return false;
+    if (selectedCat.size && !selectedCat.has(p.category)) return false;
+    return true;
+  });
+}
+
+function sortProblems(list) {
+  const sorted = [...list];
+  sorted.sort((a, b) => {
+    let va;
+    let vb;
+    if (sortKey === "num") {
+      va = a.num;
+      vb = b.num;
+    } else if (sortKey === "difficulty") {
+      va = { Easy: 1, Medium: 2, Hard: 3 }[a.difficulty] || 99;
+      vb = { Easy: 1, Medium: 2, Hard: 3 }[b.difficulty] || 99;
+    } else if (sortKey === "status") {
+      va = statusRank(getStatus(a.slug));
+      vb = statusRank(getStatus(b.slug));
+    } else if (sortKey === "last_opened") {
+      va = state.lastOpened[a.slug] || 0;
+      vb = state.lastOpened[b.slug] || 0;
+    } else {
+      va = (a[sortKey] || "").toString().toLowerCase();
+      vb = (b[sortKey] || "").toString().toLowerCase();
+    }
+
+    if (va < vb) return sortDesc ? 1 : -1;
+    if (va > vb) return sortDesc ? -1 : 1;
+    return 0;
+  });
+  return sorted;
+}
+
+function renderStats(filtered) {
+  const total = PROBLEMS.length;
+  const doneCount = PROBLEMS.filter(p => getStatus(p.slug) === "done").length;
+  const revisionCount = PROBLEMS.filter(p => getStatus(p.slug) === "revision").length;
+  const needCount = PROBLEMS.filter(p => getStatus(p.slug) === "need_practice").length;
+  const easy = filtered.filter(p => p.difficulty === "Easy").length;
+  const medium = filtered.filter(p => p.difficulty === "Medium").length;
+  const cats = new Set(filtered.map(p => p.category)).size;
+
+  document.getElementById("stats").innerHTML = `
+    <div class="card"><div class="card-title">Visible</div><div class="value">${filtered.length}/${total}</div></div>
+    <div class="card"><div class="card-title">Categories</div><div class="value">${cats}</div></div>
+    <div class="card"><div class="card-title">Easy</div><div class="value easy">${easy}</div></div>
+    <div class="card"><div class="card-title">Medium</div><div class="value medium">${medium}</div></div>
+    <div class="card"><div class="card-title">Need Practice</div><div class="value warn">${needCount}</div></div>
+    <div class="card"><div class="card-title">Revision</div><div class="value">${revisionCount}</div></div>
+  `;
+
+  const pct = total ? Math.round((doneCount / total) * 100) : 0;
+  document.getElementById("progress-ring").style.setProperty("--pct", pct + "%");
+  document.getElementById("progress-text").textContent = pct + "%";
+  document.getElementById("progress-subtext").textContent = `${doneCount} / ${total} done`;
+  document.getElementById("status-legend").innerHTML = `
+    <span class="diff diff-easy">Done: ${doneCount}</span>
+    <span class="diff diff-medium">Revision: ${revisionCount}</span>
+    <span class="diff">Need: ${needCount}</span>
+  `;
+}
+
+function formatDate(ts) {
+  if (!ts) return "Never";
+  const d = new Date(ts);
+  return d.toLocaleDateString(undefined, { day: "2-digit", month: "short" }) + " " +
+    d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+}
+
+function renderRecent() {
+  const recent = Object.entries(state.lastOpened)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([slug]) => getProblem(slug))
+    .filter(Boolean);
+
+  const target = document.getElementById("recent-list");
+  if (!recent.length) {
+    target.innerHTML = `<div style="font-size:12px;color:var(--muted);">Open any note to start tracking recent activity.</div>`;
+    return;
+  }
+  target.innerHTML = recent.map(p => `
+    <button class="search-item" type="button" onclick="openProblem('${p.slug}')">
+      <span>#${p.num} ${p.name}</span>
+      <span style="color:var(--muted);font-size:11px;">${formatDate(state.lastOpened[p.slug])}</span>
+    </button>
+  `).join("");
+}
+
+function getDayKey(ts) {
+  const d = new Date(ts);
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+}
+
+function renderActivity() {
+  const now = new Date();
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(now.getDate() - i);
+    days.push(d);
+  }
+
+  const dayCounts = {};
+  for (const ts of state.activity) {
+    const key = getDayKey(ts);
+    dayCounts[key] = (dayCounts[key] || 0) + 1;
+  }
+
+  const heat = document.getElementById("heatmap");
+  heat.innerHTML = "";
+
+  let streak = 0;
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(now);
+    d.setDate(now.getDate() - i);
+    const key = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+    if (dayCounts[key]) streak++;
+    else break;
+  }
+
+  for (const d of days) {
+    const key = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+    const count = dayCounts[key] || 0;
+    let level = 0;
+    if (count >= 1) level = 1;
+    if (count >= 3) level = 2;
+    if (count >= 6) level = 3;
+    if (count >= 10) level = 4;
+    const cell = document.createElement("div");
+    cell.className = "heat-cell";
+    cell.dataset.level = String(level);
+    cell.title = `${d.toDateString()}: ${count} opens`;
+    heat.appendChild(cell);
+  }
+
+  const lastTs = state.activity.length ? state.activity[state.activity.length - 1] : null;
+  document.getElementById("last-studied").textContent = lastTs
+    ? `Last studied: ${formatDate(lastTs)}`
+    : "No activity yet.";
+  document.getElementById("streak-text").textContent = `Current streak: ${streak} day${streak === 1 ? "" : "s"}`;
+}
+
+function renderFilterChips() {
+  const diffRoot = document.getElementById("difficulty-filters");
+  const catRoot = document.getElementById("category-filters");
+
+  const diffs = ["Easy", "Medium", "Hard"];
+  diffRoot.innerHTML = diffs.map(d => `
+    <button class="filter-chip ${selectedDiff.has(d) ? "active" : ""}" type="button" data-diff="${d}">
+      ${d}
+    </button>
+  `).join("");
+
+  const cats = Array.from(new Set(PROBLEMS.map(p => p.category)));
+  catRoot.innerHTML = cats.map(c => `
+    <button class="filter-chip ${selectedCat.has(c) ? "active" : ""}" type="button" data-cat="${c}">
+      ${categoryIcon(c)} ${c}
+    </button>
+  `).join("");
+
+  diffRoot.querySelectorAll("[data-diff]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const d = btn.dataset.diff;
+      if (selectedDiff.has(d)) selectedDiff.delete(d);
+      else selectedDiff.add(d);
+      render();
+    });
+  });
+  catRoot.querySelectorAll("[data-cat]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const c = btn.dataset.cat;
+      if (selectedCat.has(c)) selectedCat.delete(c);
+      else selectedCat.add(c);
+      render();
+    });
+  });
+}
+
+function getSearchList() {
+  return sortProblems(getFilteredProblems()).slice(0, 8);
+}
+
+function renderSearchDropdown() {
+  const dropdown = document.getElementById("search-dropdown");
+  const list = getSearchList();
+  if (!searchQuery.trim() || !list.length) {
+    dropdown.classList.remove("show");
+    dropdown.innerHTML = "";
+    searchNavIndex = -1;
+    return;
+  }
+
+  dropdown.classList.add("show");
+  dropdown.innerHTML = list.map((p, i) => `
+    <button class="search-item ${i === searchNavIndex ? "active" : ""}" type="button" data-slug="${p.slug}">
+      <span>#${p.num} ${p.name}</span>
+      <span class="${diffClass(p.difficulty)}">${p.difficulty}</span>
+    </button>
+  `).join("");
+
+  dropdown.querySelectorAll("[data-slug]").forEach(btn => {
+    btn.addEventListener("click", () => openProblem(btn.dataset.slug));
+  });
+}
+
+function problemCard(p) {
+  const status = getStatus(p.slug);
+  const pinned = state.pinned.includes(p.slug);
+  return `
+    <div class="problem-card">
+      <div class="problem-row">
+        <span class="num">${p.num}</span>
+        <span class="pname">
+          ${p.name}
+          <span class="summary-tip" title="${p.summary.replace(/"/g, "&quot;")}">i</span>
+        </span>
+        <span class="${diffClass(p.difficulty)}">${p.difficulty}</span>
+      </div>
+      <div class="problem-actions">
+        <button class="mini" type="button" data-action="open" data-slug="${p.slug}">Open</button>
+        <select class="status-select ${STATUS_CLASS[status]}" data-action="set-status" data-slug="${p.slug}" title="Set problem status">
+          ${statusOptions(status)}
+        </select>
+        <button class="mini pin ${pinned ? "active" : ""}" type="button" data-action="toggle-pin" data-slug="${p.slug}">
+          ${pinned ? "★ Pinned" : "☆ Pin"}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function attachProblemActions(container) {
+  container.querySelectorAll("select[data-action='set-status']").forEach(sel => {
+    sel.addEventListener("change", () => {
+      setStatus(sel.dataset.slug, sel.value);
+    });
+  });
+
+  container.querySelectorAll("[data-action]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const slug = btn.dataset.slug;
+      const action = btn.dataset.action;
+      if (action === "open") openProblem(slug);
+      if (action === "toggle-pin") togglePin(slug);
+    });
+  });
+}
+
+function renderPinned(filtered) {
+  const root = document.getElementById("pinned-grid");
+  const pinned = sortProblems(filtered.filter(p => state.pinned.includes(p.slug)));
+  if (!pinned.length) {
+    root.innerHTML = `<div style="font-size:12px;color:var(--muted);">No pinned problems in current filter.</div>`;
+    return;
+  }
+  root.innerHTML = pinned.map(problemCard).join("");
+  attachProblemActions(root);
+}
+
+function renderCategories(filtered) {
+  const root = document.getElementById("categories-root");
+  const empty = document.getElementById("empty-categories");
+  root.innerHTML = "";
+
+  const grouped = {};
+  CATEGORY_ORDER.forEach(c => grouped[c] = []);
+  filtered.forEach(p => {
+    if (!grouped[p.category]) grouped[p.category] = [];
+    grouped[p.category].push(p);
+  });
+  const ordered = CATEGORY_ORDER.concat(Object.keys(grouped).filter(c => !CATEGORY_ORDER.includes(c)));
+  let anyVisible = false;
+
+  ordered.forEach(cat => {
+    const items = grouped[cat];
+    if (!items || !items.length) return;
+    anyVisible = true;
+    const section = document.createElement("div");
+    section.className = "category open";
+    section.innerHTML = `
+      <button class="cat-header" aria-expanded="true">
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <path d="M9 6l6 6-6 6"></path>
+        </svg>
+        <span class="category-name"><span class="cat-icon">${categoryIcon(cat)}</span>${cat}</span>
+        <span class="cat-count">${items.length} problem${items.length > 1 ? "s" : ""}</span>
+      </button>
+      <div class="cat-body"><ul>${sortProblems(items).map(p => `<li>${problemCard(p)}</li>`).join("")}</ul></div>
+    `;
+    section.querySelector(".cat-header").addEventListener("click", () => {
+      const isOpen = section.classList.toggle("open");
+      section.querySelector(".cat-header").setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+    root.appendChild(section);
+  });
+
+  attachProblemActions(root);
+  empty.classList.toggle("show", !anyVisible);
+}
+
+function renderAll(filtered) {
+  const body = document.getElementById("all-body");
+  const empty = document.getElementById("empty-all");
+  body.innerHTML = "";
+  const sorted = sortProblems(filtered);
+
+  sorted.forEach(p => {
+    const status = getStatus(p.slug);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${p.num}</td>
+      <td><a href="${href(p.slug)}" data-open-slug="${p.slug}" title="${p.summary.replace(/"/g, "&quot;")}">${p.name}</a></td>
+      <td><span class="cat-tag"><span>${categoryIcon(p.category)}</span>${p.category}</span></td>
+      <td><span class="${diffClass(p.difficulty)}">${p.difficulty}</span></td>
+      <td>
+        <select class="status-select ${STATUS_CLASS[status]}" data-action="set-status" data-slug="${p.slug}" title="Set problem status">
+          ${statusOptions(status)}
+        </select>
+      </td>
+      <td>${state.lastOpened[p.slug] ? formatDate(state.lastOpened[p.slug]) : "Never"}</td>
+    `;
+    body.appendChild(tr);
+  });
+
+  body.querySelectorAll("[data-open-slug]").forEach(a => {
+    a.addEventListener("click", e => {
+      e.preventDefault();
+      openProblem(a.dataset.openSlug);
+    });
+  });
+  attachProblemActions(body);
+
+  empty.classList.toggle("show", sorted.length === 0);
+  document.querySelectorAll("thead th[data-sort]").forEach(th => {
+    const arrow = th.querySelector(".sort-arrow");
+    th.classList.toggle("sorted", th.dataset.sort === sortKey);
+    arrow.textContent = th.dataset.sort === sortKey ? (sortDesc ? "▼" : "▲") : "";
+  });
+}
+
+function renderRoadmap(filtered) {
+  const root = document.getElementById("roadmap-root");
+  root.innerHTML = "";
+  const grouped = {};
+  CATEGORY_ORDER.forEach(c => grouped[c] = []);
+  filtered.forEach(p => {
+    if (!grouped[p.category]) grouped[p.category] = [];
+    grouped[p.category].push(p);
+  });
+  const ordered = CATEGORY_ORDER.concat(Object.keys(grouped).filter(c => !CATEGORY_ORDER.includes(c)));
+  ordered.forEach(cat => {
+    const items = grouped[cat];
+    if (!items || !items.length) return;
+    const done = items.filter(p => getStatus(p.slug) === "done").length;
+    const pct = items.length ? Math.round((done / items.length) * 100) : 0;
+    const group = document.createElement("div");
+    group.className = "roadmap-group";
+    group.innerHTML = `
+      <div class="roadmap-head">
+        <div class="roadmap-title">${categoryIcon(cat)} ${cat}</div>
+        <div class="roadmap-progress">${done}/${items.length} done (${pct}%)</div>
+      </div>
+      <div class="roadmap-list">
+        ${sortProblems(items).map(p => `
+          <div class="roadmap-item">
+            <div class="roadmap-item-left">
+              <input type="checkbox" data-roadmap-check="${p.slug}" ${getStatus(p.slug) === "done" ? "checked" : ""}>
+              <span>#${p.num} ${p.name}</span>
+            </div>
+            <button class="mini" data-action="open" data-slug="${p.slug}">Open</button>
+          </div>
+        `).join("")}
+      </div>
+    `;
+    root.appendChild(group);
+  });
+
+  root.querySelectorAll("[data-roadmap-check]").forEach(cb => {
+    cb.addEventListener("change", () => setStatus(cb.dataset.roadmapCheck, cb.checked ? "done" : "need_practice"));
+  });
+  attachProblemActions(root);
+}
+
+function renderSearchMeta(filtered) {
+  const q = searchQuery.trim();
+  const meta = document.getElementById("search-meta");
+  meta.textContent = q
+    ? (filtered.length
+      ? `Showing ${filtered.length} result${filtered.length !== 1 ? "s" : ""} for "${q}"`
+      : `No results for "${q}"`)
+    : "";
+}
+
+function render() {
+  const filtered = getFilteredProblems();
+  renderStats(filtered);
+  renderRecent();
+  renderActivity();
+  renderFilterChips();
+  renderPinned(filtered);
+  renderCategories(filtered);
+  renderAll(filtered);
+  renderRoadmap(filtered);
+  renderSearchMeta(filtered);
+  renderSearchDropdown();
+}
+
+function clearFilters() {
+  selectedDiff.clear();
+  selectedCat.clear();
+  searchQuery = "";
+  document.getElementById("search").value = "";
+  render();
+}
+
+function pickRandom() {
+  const onlyNeed = document.getElementById("random-need-practice").checked;
+  let list = getFilteredProblems();
+  if (onlyNeed) list = list.filter(p => getStatus(p.slug) === "need_practice");
+  if (!list.length) {
+    alert("No problem available for current random criteria.");
+    return;
+  }
+  const chosen = list[Math.floor(Math.random() * list.length)];
+  openProblem(chosen.slug);
+}
+
+function exportProgress() {
+  const data = JSON.stringify(state, null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "dsa-progress.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importProgress(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      state = {
+        ...state,
+        ...data,
+        statuses: data.statuses || {},
+        pinned: Array.isArray(data.pinned) ? data.pinned : [],
+        lastOpened: data.lastOpened || {},
+        activity: Array.isArray(data.activity) ? data.activity : []
+      };
+      saveState();
+      applyTheme(state.theme || "dark", false);
+      render();
+      alert("Progress imported.");
+    } catch {
+      alert("Invalid progress file.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetProgress() {
+  if (!confirm("Reset all progress, pins, and activity?")) return;
+  state.statuses = {};
+  state.pinned = [];
+  state.lastOpened = {};
+  state.activity = [];
+  saveState();
+  render();
+}
+
+function attachGlobalHandlers() {
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    applyTheme(state.theme === "dark" ? "light" : "dark");
+  });
+  document.getElementById("auth-btn").addEventListener("click", async () => {
+    if (!firebaseReady || !firebaseAuth) return;
+    try {
+      if (currentUser) {
+        await firebaseAuth.signOut();
+      } else {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        await firebaseAuth.signInWithPopup(provider);
+      }
+    } catch (e) {
+      console.error("Auth action failed", e);
+      const code = e && e.code ? e.code : "unknown";
+      if (code === "auth/popup-blocked" || code === "auth/cancelled-popup-request" || code === "auth/operation-not-supported-in-this-environment") {
+        try {
+          const provider = new firebase.auth.GoogleAuthProvider();
+          await firebaseAuth.signInWithRedirect(provider);
+          return;
+        } catch (redirectError) {
+          console.error("Auth redirect fallback failed", redirectError);
+          setSyncStatus(`Auth error (${redirectError.code || "redirect-failed"})`);
+          alert(`Firebase auth failed: ${redirectError.code || "unknown"}\n\nCheck:\n1) Google provider enabled\n2) Authorized domain added\n3) API key referrer restrictions include this domain`);
+          return;
+        }
+      }
+      setSyncStatus(`Auth error (${code})`);
+      alert(`Firebase auth failed: ${code}\n\nCheck:\n1) Google provider enabled\n2) Authorized domain added\n3) API key referrer restrictions include this domain`);
+    }
+  });
+  document.getElementById("sync-now-btn").addEventListener("click", manualSyncNow);
+  document.getElementById("clear-filters").addEventListener("click", clearFilters);
+  document.getElementById("pick-random").addEventListener("click", pickRandom);
+  document.getElementById("export-progress").addEventListener("click", exportProgress);
+  document.getElementById("reset-progress").addEventListener("click", resetProgress);
+  document.getElementById("import-progress-btn").addEventListener("click", () => {
+    document.getElementById("import-progress-input").click();
+  });
+  document.getElementById("import-progress-input").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) importProgress(file);
+    e.target.value = "";
+  });
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  document.getElementById("search").addEventListener("input", e => {
+    searchQuery = e.target.value;
+    searchNavIndex = -1;
+    render();
+  });
+
+  document.getElementById("search").addEventListener("keydown", e => {
+    const list = getSearchList();
+    if (!list.length) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      searchNavIndex = Math.min(searchNavIndex + 1, list.length - 1);
+      renderSearchDropdown();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      searchNavIndex = Math.max(searchNavIndex - 1, 0);
+      renderSearchDropdown();
+    } else if (e.key === "Enter" && searchNavIndex >= 0 && list[searchNavIndex]) {
+      e.preventDefault();
+      openProblem(list[searchNavIndex].slug);
+    } else if (e.key === "Escape") {
+      searchNavIndex = -1;
+      renderSearchDropdown();
+    }
+  });
+
+  document.getElementById("expand-all").addEventListener("click", () => {
+    document.querySelectorAll(".category").forEach(c => c.classList.add("open"));
+  });
+  document.getElementById("collapse-all").addEventListener("click", () => {
+    document.querySelectorAll(".category").forEach(c => c.classList.remove("open"));
+  });
+
+  document.getElementById("sort-select").addEventListener("change", e => {
+    sortKey = e.target.value;
+    render();
+  });
+  document.getElementById("sort-desc").addEventListener("change", e => {
+    sortDesc = e.target.checked;
+    render();
+  });
+
+  document.querySelectorAll("thead th[data-sort]").forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      if (sortKey === key) sortDesc = !sortDesc;
+      else {
+        sortKey = key;
+        sortDesc = false;
+      }
+      document.getElementById("sort-select").value = sortKey;
+      document.getElementById("sort-desc").checked = sortDesc;
+      render();
+    });
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const mx = ((e.clientX - cx) / cx) * 18;
+    const my = ((e.clientY - cy) / cy) * 18;
+    document.body.style.setProperty("--mx", `${mx}px`);
+    document.body.style.setProperty("--my", `${my}px`);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    const tag = (e.target.tagName || "").toLowerCase();
+    const editable = tag === "input" || tag === "textarea" || e.target.isContentEditable;
+
+    if (e.key === "/" && !editable) {
+      e.preventDefault();
+      document.getElementById("search").focus();
+      return;
+    }
+    if ((e.key === "d" || e.key === "D") && !editable) {
+      e.preventDefault();
+      applyTheme(state.theme === "dark" ? "light" : "dark");
+      return;
+    }
+  });
+
+  window.addEventListener("online", () => {
+    if (currentUser) {
+      setSyncStatus("Syncing...");
+      queueCloudSave();
+    }
+    else setSyncStatus("Signed out");
+  });
+  window.addEventListener("offline", () => {
+    setSyncStatus("Offline");
+  });
+}
+
+const localState = loadLocalState();
+if (localState) state = mergeStates(state, localState);
+applyTheme(state.theme || "dark", false);
+attachGlobalHandlers();
+initFirebase();
+updateAuthUI();
+render();
+</script>
+</body>
+</html>

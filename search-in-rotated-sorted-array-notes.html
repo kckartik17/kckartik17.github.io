@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>33. Search In Rotated Sorted Array - Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Gochi+Hand&display=swap');
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: #d8d2c2;
+    font-family: 'Comic Neue', cursive;
+  }
+
+  body { padding: 18px; }
+
+  .page {
+    width: 100%;
+    max-width: 1100px;
+    min-height: 1300px;
+    margin: 0 auto;
+    background:
+      repeating-linear-gradient(#f7f3e8 0px, #f7f3e8 34px, #cfd8e8 35px);
+    background-color: #f7f3e8;
+    border: 1px solid #d8cfb8;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.15);
+    padding: 26px 34px 22px 62px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 44px;
+    width: 2px;
+    background: #e39a9a;
+    opacity: 0.6;
+  }
+
+  h1 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0;
+    color: #1f2a44;
+    text-decoration: underline;
+    text-decoration-color: #c0392b;
+    text-decoration-thickness: 3px;
+    display: inline-block;
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+
+  .problem-link { font-size: 15px; }
+  .problem-link a { color: #1a4fa0; text-decoration: underline; }
+
+  .subtitle { font-size: 16px; color: #444; margin: 4px 0 9px 0; }
+
+  .statement {
+    background: #fff8d6;
+    border: 1px solid #e3d68a;
+    border-radius: 6px;
+    padding: 7px 13px;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .prereq {
+    font-size: 14px;
+    background: #fff;
+    border: 1px dashed #999;
+    border-radius: 6px;
+    padding: 6px 13px;
+    margin-bottom: 12px;
+  }
+  .prereq b { font-family: 'Gochi Hand', cursive; font-size: 19px; color: #1f2a44; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 18px;
+    margin-bottom: 12px;
+  }
+
+  .approach {
+    border: 1.5px dashed #7a8ba3;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.35);
+  }
+
+  .approach h2 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 25px;
+    margin: 0 0 4px 0;
+    color: #a13f3f;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .badge {
+    font-family: 'Comic Neue', cursive;
+    font-size: 12px;
+    background: #1f2a44;
+    color: #fff;
+    padding: 1px 8px;
+    border-radius: 9px;
+  }
+
+  .intuition {
+    font-size: 14px;
+    color: #333;
+    background: #eef2f8;
+    border-left: 3px solid #7a8ba3;
+    padding: 5px 9px;
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
+  .intuition b { font-family: 'Gochi Hand', cursive; font-size: 17px; color: #1f2a44; }
+
+  .approach ol {
+    margin: 5px 0 6px 20px;
+    padding: 0;
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: #222;
+  }
+  .approach li { margin-bottom: 2px; }
+
+  .when-use { font-size: 12.5px; color: #555; font-style: italic; margin-top: 2px; }
+
+  .complexity {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #204d20;
+    background: #e2f0e2;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-top: 3px;
+  }
+
+  .dryrun {
+    border: 1.5px solid #1f2a44;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #eef4ff;
+  }
+  .dryrun h2 { font-family: 'Gochi Hand', cursive; font-size: 22px; margin: 0 0 5px 0; color: #1f2a44; }
+  .dryrun-steps { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12.5px; }
+  .dryrun-step {
+    background: #fff;
+    border: 1px solid #b7c4dc;
+    border-radius: 6px;
+    padding: 4px 8px;
+    min-width: 130px;
+  }
+  .dryrun-step b { font-family: 'Gochi Hand', cursive; font-size: 15px; color: #a13f3f; }
+
+  .mid-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .code-section {
+    border: 1.5px solid #204d20;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #f0faf0;
+  }
+  .code-section h2 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 22px;
+    margin: 0 0 4px 0;
+    color: #204d20;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .code-block {
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 11.5px;
+    line-height: 1.45;
+    background: #1f2a44;
+    color: #e8ecf4;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin: 0 0 6px 0;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .code-block .kw { color: #7ec8e3; }
+  .code-block .ty { color: #f4c97a; }
+  .code-block .cm { color: #8a9bb8; font-style: italic; }
+  .code-note { font-size: 12px; color: #333; line-height: 1.35; }
+
+  .footer-row {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  .pitfalls {
+    border: 1.5px solid #c0392b;
+    border-radius: 8px;
+    padding: 8px 13px;
+    background: #fdeaea;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .pitfalls h2 { font-family: 'Gochi Hand', cursive; font-size: 21px; margin: 0 0 3px 0; color: #a13f3f; }
+  .pitfalls code { background: #fff; padding: 0 3px; border-radius: 3px; }
+
+  .tip {
+    border: 1.5px solid #7a4fa1;
+    border-radius: 8px;
+    padding: 8px 13px;
+    background: #f4ecfa;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .tip h2 { font-family: 'Gochi Hand', cursive; font-size: 21px; margin: 0 0 3px 0; color: #7a4fa1; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th, table td { border: 1px solid #999; padding: 4px 6px; text-align: center; }
+  table th { background: #1f2a44; color: #fff; font-family: 'Gochi Hand', cursive; font-size: 16px; }
+
+  .cmp-title { font-family: 'Gochi Hand', cursive; font-size: 21px; color: #1f2a44; margin: 0 0 4px 0; }
+  .star { color: #c0392b; }
+
+  .doodle { font-family: 'Gochi Hand', cursive; font-size: 14px; color: #7a8ba3; text-align: right; white-space: nowrap; }
+
+  @page { size: auto; margin: 8mm; }
+  @media print {
+    html, body { background: #fff; padding: 0; }
+    .page { box-shadow: none; border: none; max-width: 100%; min-height: 100vh; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="top-row">
+      <h1>33. Search In Rotated Sorted Array</h1>
+      <div class="doodle">source: neetcode.io</div>
+    </div>
+    <div class="problem-link">🔗 <a href="https://neetcode.io/solutions/search-in-rotated-sorted-array" target="_blank">neetcode.io/solutions/search-in-rotated-sorted-array</a></div>
+    <div class="subtitle">Find target index in a rotated ascending array with unique elements.</div>
+
+    <div class="statement">
+      Ex: [3,4,5,6,1,2], target=1 &rarr; 4 &nbsp;&nbsp;|&nbsp;&nbsp; n &le; 1000, unique values &nbsp;&nbsp;|&nbsp;&nbsp; Goal &rarr; <b>O(log n) time, O(1) space</b>
+    </div>
+
+    <div class="prereq">
+      <b>Prereqs:</b> Binary Search &middot; Array indexing &middot; Rotated array = two sorted segments split at the pivot (smallest element)
+    </div>
+
+    <div class="grid">
+      <div class="approach">
+        <h2>1. Brute Force <span class="badge">easiest</span></h2>
+        <div class="intuition"><b>Intuition:</b> Walk the array left to right and compare each value to the target. Correct but ignores the sorted structure entirely.</div>
+        <ol>
+          <li>Iterate index i from 0 to n&minus;1.</li>
+          <li>If nums[i] equals target, return i.</li>
+          <li>Finish loop with no match &rarr; return &minus;1.</li>
+        </ol>
+        <span class="complexity">O(n) time &middot; O(1) space</span>
+        <div class="when-use">Use when: sanity check or n is tiny; not acceptable for interviews.</div>
+      </div>
+
+      <div class="approach">
+        <h2>2. Binary Search <span class="badge">2-pass</span></h2>
+        <div class="intuition"><b>Intuition:</b> Rotation joins two sorted chunks. Locate the pivot (min element), then run standard binary search on each half until the target appears.</div>
+        <ol>
+          <li>BS to find pivot: if nums[mid] &gt; nums[r], pivot is right; else shrink left.</li>
+          <li>Pivot splits array into two sorted halves.</li>
+          <li>Binary search left half [0, pivot&minus;1]; return if found.</li>
+          <li>Binary search right half [pivot, n&minus;1]; return index or &minus;1.</li>
+        </ol>
+        <span class="complexity">O(log n) time &middot; O(1) space</span>
+        <div class="when-use">Use when: you want to reuse a helper binarySearch function.</div>
+      </div>
+
+      <div class="approach">
+        <h2>3. Binary Search (Two Pass) <span class="badge">clean 2-pass</span></h2>
+        <div class="intuition"><b>Intuition:</b> Same pivot discovery, but pick the correct half upfront by checking whether target lies in the value range of the right segment.</div>
+        <ol>
+          <li>Find pivot with mid-vs-right comparison (same as above).</li>
+          <li>If target &isin; [nums[pivot], nums[n&minus;1]], set search range to right half.</li>
+          <li>Otherwise restrict range to left half [0, pivot&minus;1].</li>
+          <li>Run one standard binary search on the chosen range.</li>
+        </ol>
+        <span class="complexity">O(log n) time &middot; O(1) space</span>
+        <div class="when-use">Use when: separating &ldquo;find pivot&rdquo; from &ldquo;find target&rdquo; feels clearer.</div>
+      </div>
+
+      <div class="approach">
+        <h2>4. Binary Search (One Pass) <span class="badge">optimal</span></h2>
+        <div class="intuition"><b>Intuition:</b> At every mid, one side is fully sorted. Check if target sits in that side&rsquo;s value range; if yes, search there, else discard it&mdash;all in a single loop.</div>
+        <ol>
+          <li>While l &le; r, compute mid; return mid if nums[mid] == target.</li>
+          <li>If left half sorted (nums[l] &le; nums[mid]): target outside [nums[l], nums[mid]] &rarr; l = mid+1, else r = mid&minus;1.</li>
+          <li>Else right half sorted: target outside (nums[mid], nums[r]] &rarr; r = mid&minus;1, else l = mid+1.</li>
+          <li>Exit loop &rarr; return &minus;1.</li>
+        </ol>
+        <span class="complexity">O(log n) time &middot; O(1) space</span>
+        <div class="when-use">Use when: interviewer wants one elegant O(log n) solution.</div>
+      </div>
+    </div>
+
+    <div class="mid-row">
+      <div class="dryrun">
+        <h2>Dry Run &mdash; One Pass on [3,4,5,6,1,2], target=1</h2>
+        <div class="dryrun-steps">
+          <div class="dryrun-step"><b>Start</b><br>l=0, r=5 &middot; array [3,4,5,6,1,2]</div>
+          <div class="dryrun-step"><b>Iter 1</b><br>mid=2, val=5 &middot; left [3,4,5] sorted &middot; 1 &lt; 3 &rarr; discard left &middot; l=3</div>
+          <div class="dryrun-step"><b>Iter 2</b><br>mid=4, val=1 == target &rarr; <b>return 4</b></div>
+        </div>
+      </div>
+
+      <div class="code-section">
+        <h2>Interview Code <span class="badge">C++ &middot; One Pass</span></h2>
+        <pre class="code-block"><span class="kw">class</span> <span class="ty">Solution</span> {
+<span class="kw">public</span>:
+    <span class="ty">int</span> search(<span class="ty">vector</span>&lt;<span class="ty">int</span>&gt;&amp; nums, <span class="ty">int</span> target) {
+        <span class="ty">int</span> l = <span class="ty">0</span>, r = nums.size() - <span class="ty">1</span>;
+        <span class="kw">while</span> (l &lt;= r) {
+            <span class="ty">int</span> mid = l + (r - l) / <span class="ty">2</span>;
+            <span class="kw">if</span> (nums[mid] == target) <span class="kw">return</span> mid;
+            <span class="kw">if</span> (nums[l] &lt;= nums[mid]) {          <span class="cm">// left half sorted</span>
+                <span class="kw">if</span> (target &gt; nums[mid] || target &lt; nums[l])
+                    l = mid + <span class="ty">1</span>;
+                <span class="kw">else</span> r = mid - <span class="ty">1</span>;
+            } <span class="kw">else</span> {                              <span class="cm">// right half sorted</span>
+                <span class="kw">if</span> (target &lt; nums[mid] || target &gt; nums[r])
+                    r = mid - <span class="ty">1</span>;
+                <span class="kw">else</span> l = mid + <span class="ty">1</span>;
+            }
+        }
+        <span class="kw">return</span> -<span class="ty">1</span>;
+    }
+};</pre>
+        <div class="code-note">
+          <b>Say in interview:</b> &ldquo;One half is always sorted&mdash;I check if target is in that range and discard the other half. O(log n) time, O(1) space. Use <code>&lt;=</code> on nums[l] vs nums[mid] so l==mid works.&rdquo;
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <div class="pitfalls">
+        <h2>&#9888; Common Pitfalls</h2>
+        Use <code>nums[l] &lt;= nums[mid]</code> (not &lt;) &mdash; handles l==mid in tiny windows.<br>
+        Don&rsquo;t mix pivot-finding logic with target search in two-pass variants.<br>
+        Test unrotated arrays like [1,2,3,4,5] &mdash; pivot should be index 0.
+      </div>
+
+      <div class="tip">
+        <h2>&#128161; Interview Tip</h2>
+        Start with brute force, then explain the two-segment insight. Offer two-pass pivot+search, then collapse to one-pass once they&rsquo;re comfortable. Draw which half is sorted at each step.
+      </div>
+
+      <div>
+        <p class="cmp-title">Quick Comparison</p>
+        <table>
+          <tr><th>Approach</th><th>Time</th><th>Space</th></tr>
+          <tr><td>Brute Force</td><td>O(n)</td><td>O(1)</td></tr>
+          <tr><td>BS + helper</td><td>O(log n)</td><td>O(1)</td></tr>
+          <tr><td>BS Two Pass</td><td>O(log n)</td><td>O(1)</td></tr>
+          <tr><td class="star">BS One Pass &#9733;</td><td class="star">O(log n)</td><td class="star">O(1)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

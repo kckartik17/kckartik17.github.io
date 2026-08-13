@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>81. Search In Rotated Sorted Array II - Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Gochi+Hand&display=swap');
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: #d8d2c2;
+    font-family: 'Comic Neue', cursive;
+  }
+
+  body { padding: 18px; }
+
+  .page {
+    width: 100%;
+    max-width: 1100px;
+    min-height: 1300px;
+    margin: 0 auto;
+    background:
+      repeating-linear-gradient(#f7f3e8 0px, #f7f3e8 34px, #cfd8e8 35px);
+    background-color: #f7f3e8;
+    border: 1px solid #d8cfb8;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.15);
+    padding: 26px 34px 22px 62px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 44px;
+    width: 2px;
+    background: #e39a9a;
+    opacity: 0.6;
+  }
+
+  h1 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0;
+    color: #1f2a44;
+    text-decoration: underline;
+    text-decoration-color: #c0392b;
+    text-decoration-thickness: 3px;
+    display: inline-block;
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+
+  .problem-link { font-size: 15px; }
+  .problem-link a { color: #1a4fa0; text-decoration: underline; }
+
+  .subtitle { font-size: 16px; color: #444; margin: 4px 0 9px 0; }
+
+  .statement {
+    background: #fff8d6;
+    border: 1px solid #e3d68a;
+    border-radius: 6px;
+    padding: 7px 13px;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .prereq {
+    font-size: 14px;
+    background: #fff;
+    border: 1px dashed #999;
+    border-radius: 6px;
+    padding: 6px 13px;
+    margin-bottom: 12px;
+  }
+  .prereq b { font-family: 'Gochi Hand', cursive; font-size: 19px; color: #1f2a44; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 18px;
+    margin-bottom: 12px;
+  }
+
+  .approach {
+    border: 1.5px dashed #7a8ba3;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.35);
+  }
+
+  .approach h2 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 25px;
+    margin: 0 0 4px 0;
+    color: #a13f3f;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .badge {
+    font-family: 'Comic Neue', cursive;
+    font-size: 12px;
+    background: #1f2a44;
+    color: #fff;
+    padding: 1px 8px;
+    border-radius: 9px;
+  }
+
+  .intuition {
+    font-size: 14px;
+    color: #333;
+    background: #eef2f8;
+    border-left: 3px solid #7a8ba3;
+    padding: 5px 9px;
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
+  .intuition b { font-family: 'Gochi Hand', cursive; font-size: 17px; color: #1f2a44; }
+
+  .approach ol {
+    margin: 5px 0 6px 20px;
+    padding: 0;
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: #222;
+  }
+  .approach li { margin-bottom: 2px; }
+
+  .when-use { font-size: 12.5px; color: #555; font-style: italic; margin-top: 2px; }
+
+  .complexity {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #204d20;
+    background: #e2f0e2;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-top: 3px;
+  }
+
+  .dryrun {
+    border: 1.5px solid #1f2a44;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #eef4ff;
+  }
+  .dryrun h2 { font-family: 'Gochi Hand', cursive; font-size: 22px; margin: 0 0 5px 0; color: #1f2a44; }
+  .dryrun-steps { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12.5px; }
+  .dryrun-step {
+    background: #fff;
+    border: 1px solid #b7c4dc;
+    border-radius: 6px;
+    padding: 4px 8px;
+    min-width: 130px;
+  }
+  .dryrun-step b { font-family: 'Gochi Hand', cursive; font-size: 15px; color: #a13f3f; }
+
+  .mid-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .code-section {
+    border: 1.5px solid #204d20;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #f0faf0;
+  }
+  .code-section h2 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 22px;
+    margin: 0 0 4px 0;
+    color: #204d20;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .code-block {
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 11.5px;
+    line-height: 1.45;
+    background: #1f2a44;
+    color: #e8ecf4;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin: 0 0 6px 0;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .code-block .kw { color: #7ec8e3; }
+  .code-block .ty { color: #f4c97a; }
+  .code-block .cm { color: #8a9bb8; font-style: italic; }
+  .code-note { font-size: 12px; color: #333; line-height: 1.35; }
+
+  .footer-row {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  .pitfalls {
+    border: 1.5px solid #c0392b;
+    border-radius: 8px;
+    padding: 8px 13px;
+    background: #fdeaea;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .pitfalls h2 { font-family: 'Gochi Hand', cursive; font-size: 21px; margin: 0 0 3px 0; color: #a13f3f; }
+  .pitfalls code { background: #fff; padding: 0 3px; border-radius: 3px; }
+
+  .tip {
+    border: 1.5px solid #7a4fa1;
+    border-radius: 8px;
+    padding: 8px 13px;
+    background: #f4ecfa;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .tip h2 { font-family: 'Gochi Hand', cursive; font-size: 21px; margin: 0 0 3px 0; color: #7a4fa1; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th, table td { border: 1px solid #999; padding: 4px 6px; text-align: center; }
+  table th { background: #1f2a44; color: #fff; font-family: 'Gochi Hand', cursive; font-size: 16px; }
+
+  .cmp-title { font-family: 'Gochi Hand', cursive; font-size: 21px; color: #1f2a44; margin: 0 0 4px 0; }
+  .star { color: #c0392b; }
+
+  .doodle { font-family: 'Gochi Hand', cursive; font-size: 14px; color: #7a8ba3; text-align: right; white-space: nowrap; }
+
+  @page { size: auto; margin: 8mm; }
+  @media print {
+    html, body { background: #fff; padding: 0; }
+    .page { box-shadow: none; border: none; max-width: 100%; min-height: 100vh; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="top-row">
+      <h1>81. Search In Rotated Sorted Array II</h1>
+      <div class="doodle">source: neetcode.io</div>
+    </div>
+    <div class="problem-link">🔗 <a href="https://leetcode.com/problems/search-in-rotated-sorted-array-ii/" target="_blank">leetcode.com/problems/search-in-rotated-sorted-array-ii</a></div>
+    <div class="subtitle">Return whether target exists in a rotated sorted array that may contain duplicates.</div>
+
+    <div class="statement">
+      Ex: [3,4,4,5,6,1,2,2], target=1 &rarr; true &nbsp;|&nbsp; n &le; 5000, values may repeat &nbsp;&nbsp;|&nbsp;&nbsp; Goal &rarr; <b>O(log n) avg, O(n) worst</b>
+    </div>
+
+    <div class="prereq">
+      <b>Prereqs:</b> Binary search on rotated arrays &bull; Identifying which half stays sorted &bull; Shrinking search when nums[l]==nums[m] (duplicates)
+    </div>
+
+    <div class="grid">
+      <div class="approach">
+        <h2>1. Brute Force <span class="badge">easiest</span></h2>
+        <div class="intuition"><b>Intuition:</b> Walk the whole array and bail out the moment you spot target. Ignores rotation and duplicates but always works.</div>
+        <ol>
+          <li>Loop through every index i.</li>
+          <li>If nums[i] equals target, return true.</li>
+          <li>Finish loop with no hit &rarr; return false.</li>
+        </ol>
+        <span class="complexity">O(n) time &middot; O(1) space</span>
+        <div class="when-use">Use when: you need a baseline or the array is tiny.</div>
+      </div>
+
+      <div class="approach">
+        <h2>2. Binary Search <span class="badge">optimal</span></h2>
+        <div class="intuition"><b>Intuition:</b> One side of mid is always sorted&mdash;check if target sits in that range. When nums[l]==nums[m], duplicates block a decision, so shrink l by one.</div>
+        <ol>
+          <li>l=0, r=n&minus;1; while l&le;r, m = l+(r&minus;l)/2.</li>
+          <li>nums[m]==target &rarr; true.</li>
+          <li>nums[l]&lt;nums[m]: left sorted&mdash;go left if target in [nums[l], nums[m]), else right.</li>
+          <li>nums[l]&gt;nums[m]: right sorted&mdash;go right if target in (nums[m], nums[r]], else left.</li>
+          <li>nums[l]==nums[m]: l++ (skip duplicate). Return false if loop ends.</li>
+        </ol>
+        <span class="complexity">O(log n) avg &middot; O(n) worst &middot; O(1) space</span>
+        <div class="when-use">Use when: interview answer&mdash;same rotated BS as LC 33 plus duplicate guard.</div>
+      </div>
+    </div>
+
+    <div class="mid-row">
+      <div class="dryrun">
+        <h2>Dry Run &mdash; BS on [3,4,4,5,6,1,2,2], target=1</h2>
+        <div class="dryrun-steps">
+          <div class="dryrun-step"><b>Iter 1</b><br>l=0,r=7,m=3, nums[m]=5&ne;1</div>
+          <div class="dryrun-step"><b>Left sorted</b><br>nums[0]=3 &lt; 5; 1 not in [3,5) &rarr; l=4</div>
+          <div class="dryrun-step"><b>Iter 2</b><br>l=4,r=7,m=5, nums[5]=1 &check;</div>
+          <div class="dryrun-step"><b>Return</b><br>true</div>
+          <div class="dryrun-step"><b>Dup case</b><br>[1,1,1,1,1,0]: nums[l]==nums[m] &rarr; l++ each step</div>
+          <div class="dryrun-step"><b>Bounds</b><br>Left range: nums[l]&le;target&lt;nums[m]; right: nums[m]&lt;target&le;nums[r]</div>
+        </div>
+      </div>
+
+      <div class="code-section">
+        <h2>Interview Code <span class="badge">C++ &middot; Binary Search</span></h2>
+        <pre class="code-block"><span class="kw">class</span> <span class="ty">Solution</span> {
+<span class="kw">public</span>:
+    <span class="ty">bool</span> search(<span class="ty">vector</span>&lt;<span class="ty">int</span>&gt;&amp; nums, <span class="ty">int</span> target) {
+        <span class="ty">int</span> l = <span class="cm">0</span>, r = nums.size() - <span class="cm">1</span>;
+        <span class="kw">while</span> (l &lt;= r) {
+            <span class="ty">int</span> m = l + (r - l) / <span class="cm">2</span>;
+            <span class="kw">if</span> (nums[m] == target) <span class="kw">return</span> <span class="kw">true</span>;
+            <span class="kw">if</span> (nums[l] &lt; nums[m]) {
+                <span class="kw">if</span> (nums[l] &lt;= target &amp;&amp; target &lt; nums[m]) r = m - <span class="cm">1</span>;
+                <span class="kw">else</span> l = m + <span class="cm">1</span>;
+            } <span class="kw">else if</span> (nums[l] &gt; nums[m]) {
+                <span class="kw">if</span> (nums[m] &lt; target &amp;&amp; target &lt;= nums[r]) l = m + <span class="cm">1</span>;
+                <span class="kw">else</span> r = m - <span class="cm">1</span>;
+            } <span class="kw">else</span> l++;
+        }
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+};</pre>
+        <div class="code-note">
+          <b>Say in interview:</b> O(log n) average but O(n) worst when all duplicates&mdash;l++ linearly skips them. Key diff from LC 33: the nums[l]==nums[m] branch. Mind inclusive/exclusive bounds on each half.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <div class="pitfalls">
+        <h2>&#9888; Common Pitfalls</h2>
+        &bull; Forgetting <code>nums[l]==nums[m]</code> &rarr; must do l++.<br>
+        &bull; Wrong range checks: left uses &le; on l side, &lt; on m side.<br>
+        &bull; Claiming strict O(log n)&mdash;worst case is O(n) with many dupes.
+      </div>
+
+      <div class="tip">
+        <h2>&#128161; Interview Tip</h2>
+        Start from LC 33 rotated BS, then add: &quot;when l and m values tie, I can&apos;t tell which half is sorted, so I shrink l.&quot; Mention average vs worst-case time upfront.
+      </div>
+
+      <div>
+        <p class="cmp-title">Quick Comparison</p>
+        <table>
+          <tr><th>Approach</th><th>Time</th><th>Space</th></tr>
+          <tr><td>Brute Force</td><td>O(n)</td><td>O(1)</td></tr>
+          <tr><td class="star">Binary Search &#9733;</td><td class="star">O(log n)*</td><td class="star">O(1)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

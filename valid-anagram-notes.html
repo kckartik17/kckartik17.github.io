@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>242. Valid Anagram - Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Gochi+Hand&display=swap');
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: #d8d2c2;
+    font-family: 'Comic Neue', cursive;
+  }
+
+  body { padding: 18px; }
+
+  .page {
+    width: 100%;
+    max-width: 1100px;
+    min-height: 1300px;
+    margin: 0 auto;
+    background:
+      repeating-linear-gradient(#f7f3e8 0px, #f7f3e8 34px, #cfd8e8 35px);
+    background-color: #f7f3e8;
+    border: 1px solid #d8cfb8;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.15);
+    padding: 26px 34px 22px 62px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 44px;
+    width: 2px;
+    background: #e39a9a;
+    opacity: 0.6;
+  }
+
+  h1 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0;
+    color: #1f2a44;
+    text-decoration: underline;
+    text-decoration-color: #c0392b;
+    text-decoration-thickness: 3px;
+    display: inline-block;
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+
+  .problem-link { font-size: 15px; }
+  .problem-link a { color: #1a4fa0; text-decoration: underline; }
+
+  .subtitle { font-size: 16px; color: #444; margin: 4px 0 9px 0; }
+
+  .statement {
+    background: #fff8d6;
+    border: 1px solid #e3d68a;
+    border-radius: 6px;
+    padding: 7px 13px;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .prereq {
+    font-size: 14px;
+    background: #fff;
+    border: 1px dashed #999;
+    border-radius: 6px;
+    padding: 6px 13px;
+    margin-bottom: 12px;
+  }
+  .prereq b { font-family: 'Gochi Hand', cursive; font-size: 19px; color: #1f2a44; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 18px;
+    margin-bottom: 12px;
+  }
+
+  .approach {
+    border: 1.5px dashed #7a8ba3;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.35);
+  }
+
+  .approach h2 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 25px;
+    margin: 0 0 4px 0;
+    color: #a13f3f;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .badge {
+    font-family: 'Comic Neue', cursive;
+    font-size: 12px;
+    background: #1f2a44;
+    color: #fff;
+    padding: 1px 8px;
+    border-radius: 9px;
+  }
+
+  .intuition {
+    font-size: 14px;
+    color: #333;
+    background: #eef2f8;
+    border-left: 3px solid #7a8ba3;
+    padding: 5px 9px;
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
+  .intuition b { font-family: 'Gochi Hand', cursive; font-size: 17px; color: #1f2a44; }
+
+  .approach ol {
+    margin: 5px 0 6px 20px;
+    padding: 0;
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: #222;
+  }
+  .approach li { margin-bottom: 2px; }
+
+  .when-use { font-size: 12.5px; color: #555; font-style: italic; margin-top: 2px; }
+
+  .complexity {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #204d20;
+    background: #e2f0e2;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-top: 3px;
+  }
+
+  .dryrun {
+    border: 1.5px solid #1f2a44;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #eef4ff;
+  }
+  .dryrun h2 { font-family: 'Gochi Hand', cursive; font-size: 22px; margin: 0 0 5px 0; color: #1f2a44; }
+  .dryrun-steps { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12.5px; }
+  .dryrun-step {
+    background: #fff;
+    border: 1px solid #b7c4dc;
+    border-radius: 6px;
+    padding: 4px 8px;
+    min-width: 130px;
+  }
+  .dryrun-step b { font-family: 'Gochi Hand', cursive; font-size: 15px; color: #a13f3f; }
+
+  .mid-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .code-section {
+    border: 1.5px solid #204d20;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #f0faf0;
+  }
+  .code-section h2 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 22px;
+    margin: 0 0 4px 0;
+    color: #204d20;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .code-block {
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 11.5px;
+    line-height: 1.45;
+    background: #1f2a44;
+    color: #e8ecf4;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin: 0 0 6px 0;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .code-block .kw { color: #7ec8e3; }
+  .code-block .ty { color: #f4c97a; }
+  .code-block .cm { color: #8a9bb8; font-style: italic; }
+  .code-note { font-size: 12px; color: #333; line-height: 1.35; }
+
+  .footer-row {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  .pitfalls {
+    border: 1.5px solid #c0392b;
+    border-radius: 8px;
+    padding: 8px 13px;
+    background: #fdeaea;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .pitfalls h2 { font-family: 'Gochi Hand', cursive; font-size: 21px; margin: 0 0 3px 0; color: #a13f3f; }
+  .pitfalls code { background: #fff; padding: 0 3px; border-radius: 3px; }
+
+  .tip {
+    border: 1.5px solid #7a4fa1;
+    border-radius: 8px;
+    padding: 8px 13px;
+    background: #f4ecfa;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .tip h2 { font-family: 'Gochi Hand', cursive; font-size: 21px; margin: 0 0 3px 0; color: #7a4fa1; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th, table td { border: 1px solid #999; padding: 4px 6px; text-align: center; }
+  table th { background: #1f2a44; color: #fff; font-family: 'Gochi Hand', cursive; font-size: 16px; }
+
+  .cmp-title { font-family: 'Gochi Hand', cursive; font-size: 21px; color: #1f2a44; margin: 0 0 4px 0; }
+  .star { color: #c0392b; }
+
+  .doodle { font-family: 'Gochi Hand', cursive; font-size: 14px; color: #7a8ba3; text-align: right; white-space: nowrap; }
+
+  @page { size: auto; margin: 8mm; }
+  @media print {
+    html, body { background: #fff; padding: 0; }
+    .page { box-shadow: none; border: none; max-width: 100%; min-height: 100vh; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="top-row">
+      <h1>242. Valid Anagram</h1>
+      <div class="doodle">source: neetcode.io</div>
+    </div>
+    <div class="problem-link">🔗 <a href="https://leetcode.com/problems/valid-anagram/" target="_blank">leetcode.com/problems/valid-anagram</a></div>
+    <div class="subtitle">Decide whether two strings use the exact same multiset of lowercase letters.</div>
+
+    <div class="statement">
+      Ex: s=&quot;racecar&quot;, t=&quot;carrace&quot; &rarr; true &nbsp;|&nbsp; s=&quot;jar&quot;, t=&quot;jam&quot; &rarr; false &nbsp;&nbsp;|&nbsp;&nbsp; n,m &le; 5&times;10<sup>4</sup>, lowercase a&ndash;z &nbsp;&nbsp;|&nbsp;&nbsp; Goal &rarr; <b>O(n+m) time, O(1) space</b>
+    </div>
+
+    <div class="prereq">
+      <b>Prereqs:</b> Hash maps for per-char counts &bull; Sorting for canonical reordering &bull; Fixed-size arrays when alphabet is bounded (26 letters)
+    </div>
+
+    <div class="grid">
+      <div class="approach">
+        <h2>1. Sorting <span class="badge">easiest</span></h2>
+        <div class="intuition"><b>Intuition:</b> Anagrams share the same letter counts; sorting puts both strings in identical order. If the sorted results match, every character frequency must match too.</div>
+        <ol>
+          <li>Return false immediately if lengths differ.</li>
+          <li>Sort both strings character-wise.</li>
+          <li>Compare sorted strings; equal &rarr; true, else false.</li>
+        </ol>
+        <span class="complexity">O(n log n + m log m) time &middot; O(1)* space</span>
+        <div class="when-use">Use when: you want the shortest code and sorting cost is acceptable.</div>
+      </div>
+
+      <div class="approach">
+        <h2>2. Hash Map <span class="badge">linear</span></h2>
+        <div class="intuition"><b>Intuition:</b> Skip sorting&mdash;walk both strings once and tally how often each letter appears. Matching frequency maps means the strings are anagrams.</div>
+        <ol>
+          <li>Return false if lengths differ.</li>
+          <li>Build two hash maps counting chars in s and t.</li>
+          <li>Increment counts while scanning both strings in parallel.</li>
+          <li>Return whether the two maps are equal.</li>
+        </ol>
+        <span class="complexity">O(n + m) time &middot; O(1) space</span>
+        <div class="when-use">Use when: alphabet size is unknown or you want a general frequency-count pattern.</div>
+      </div>
+
+      <div class="approach">
+        <h2>3. Hash Table (Array) <span class="badge">optimal</span></h2>
+        <div class="intuition"><b>Intuition:</b> Only 26 lowercase letters exist, so a length-26 array replaces hash maps. Bump counts for s, drop counts for t; all zeros at the end means perfect cancellation.</div>
+        <ol>
+          <li>Return false if lengths differ.</li>
+          <li>Create <code>count[26]</code>, all zeros.</li>
+          <li>For each index i: <code>count[s[i]-'a']++</code>, <code>count[t[i]-'a']--</code>.</li>
+          <li>If every slot is 0, return true; else false.</li>
+        </ol>
+        <span class="complexity">O(n + m) time &middot; O(1) space</span>
+        <div class="when-use">Use when: fixed lowercase alphabet&mdash;fastest interview answer with no hash overhead.</div>
+      </div>
+    </div>
+
+    <div class="mid-row">
+      <div class="dryrun">
+        <h2>Dry Run &mdash; Array Counter on s=&quot;anagram&quot;, t=&quot;nagaram&quot;</h2>
+        <div class="dryrun-steps">
+          <div class="dryrun-step"><b>Start</b><br>count[26] = all 0; lengths both 7 &check;</div>
+          <div class="dryrun-step"><b>i=0</b><br>s:a &rarr; count[0]=1; t:n &rarr; count[13]=-1</div>
+          <div class="dryrun-step"><b>i=1</b><br>s:n &rarr; count[13]=0; t:a &rarr; count[0]=0</div>
+          <div class="dryrun-step"><b>i=2&ndash;3</b><br>a/g pairs cancel; count[0],[6] stay 0</div>
+          <div class="dryrun-step"><b>i=4</b><br>both 'r' &rarr; count[17]: +1 then -1 = 0</div>
+          <div class="dryrun-step"><b>i=5&ndash;6</b><br>a/m and m/a pairs cancel fully</div>
+          <div class="dryrun-step"><b>Scan</b><br>all 26 slots = 0 &rarr; return <b>true</b></div>
+        </div>
+      </div>
+
+      <div class="code-section">
+        <h2>Interview Code <span class="badge">C++ &middot; Array Counter</span></h2>
+        <pre class="code-block"><span class="kw">class</span> <span class="ty">Solution</span> {
+<span class="kw">public</span>:
+    <span class="ty">bool</span> isAnagram(<span class="ty">string</span> s, <span class="ty">string</span> t) {
+        <span class="kw">if</span> (s.length() != t.length()) <span class="kw">return</span> <span class="kw">false</span>;
+
+        <span class="ty">vector</span>&lt;<span class="ty">int</span>&gt; count(<span class="cm">26</span>, <span class="cm">0</span>);
+        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="cm">0</span>; i &lt; s.length(); i++) {
+            count[s[i] - <span class="cm">'a'</span>]++;
+            count[t[i] - <span class="cm">'a'</span>]--;
+        }
+        <span class="kw">for</span> (<span class="ty">int</span> val : count)
+            <span class="kw">if</span> (val != <span class="cm">0</span>) <span class="kw">return</span> <span class="kw">false</span>;
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+};</pre>
+        <div class="code-note">
+          <b>Say in interview:</b> O(n+m) single pass with O(1) space (26 slots). Length check first. Increment/decrement trick avoids building two maps&mdash;mention you can early-exit if any count goes negative.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <div class="pitfalls">
+        <h2>&#9888; Common Pitfalls</h2>
+        &bull; Skipping the length check wastes work on impossible cases.<br>
+        &bull; Mixed-case inputs need normalization; here all lowercase is guaranteed.<br>
+        &bull; Using one map for both strings without +/- can double memory unnecessarily.
+      </div>
+
+      <div class="tip">
+        <h2>&#128161; Interview Tip</h2>
+        Start with sorting (quick to code), then improve to hash maps, then tighten to the 26-slot array when you note the alphabet bound. State target O(n+m) / O(1) before coding the optimal version.
+      </div>
+
+      <div>
+        <p class="cmp-title">Quick Comparison</p>
+        <table>
+          <tr><th>Approach</th><th>Time</th><th>Space</th></tr>
+          <tr><td>Sorting</td><td>O(n log n + m log m)</td><td>O(1)*</td></tr>
+          <tr><td>Hash Map</td><td>O(n + m)</td><td>O(1)</td></tr>
+          <tr><td class="star">Array Counter &#9733;</td><td class="star">O(n + m)</td><td class="star">O(1)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

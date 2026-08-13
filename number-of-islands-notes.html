@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>200. Number of Islands - Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Gochi+Hand&display=swap');
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: #d8d2c2;
+    font-family: 'Comic Neue', cursive;
+  }
+
+  body { padding: 18px; }
+
+  .page {
+    width: 100%;
+    max-width: 1100px;
+    min-height: 1300px;
+    margin: 0 auto;
+    background:
+      repeating-linear-gradient(#f7f3e8 0px, #f7f3e8 34px, #cfd8e8 35px);
+    background-color: #f7f3e8;
+    border: 1px solid #d8cfb8;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.15);
+    padding: 26px 34px 22px 62px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 44px;
+    width: 2px;
+    background: #e39a9a;
+    opacity: 0.6;
+  }
+
+  h1 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0;
+    color: #1f2a44;
+    text-decoration: underline;
+    text-decoration-color: #c0392b;
+    text-decoration-thickness: 3px;
+    display: inline-block;
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+
+  .problem-link { font-size: 15px; }
+  .problem-link a { color: #1a4fa0; text-decoration: underline; }
+
+  .subtitle { font-size: 16px; color: #444; margin: 4px 0 9px 0; }
+
+  .statement {
+    background: #fff8d6;
+    border: 1px solid #e3d68a;
+    border-radius: 6px;
+    padding: 7px 13px;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .prereq {
+    font-size: 14px;
+    background: #fff;
+    border: 1px dashed #999;
+    border-radius: 6px;
+    padding: 6px 13px;
+    margin-bottom: 12px;
+  }
+  .prereq b { font-family: 'Gochi Hand', cursive; font-size: 19px; color: #1f2a44; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 18px;
+    margin-bottom: 12px;
+  }
+
+  .approach {
+    border: 1.5px dashed #7a8ba3;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.35);
+  }
+
+  .approach h2 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 25px;
+    margin: 0 0 4px 0;
+    color: #a13f3f;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .badge {
+    font-family: 'Comic Neue', cursive;
+    font-size: 12px;
+    background: #1f2a44;
+    color: #fff;
+    padding: 1px 8px;
+    border-radius: 9px;
+  }
+
+  .intuition {
+    font-size: 14px;
+    color: #333;
+    background: #eef2f8;
+    border-left: 3px solid #7a8ba3;
+    padding: 5px 9px;
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
+  .intuition b { font-family: 'Gochi Hand', cursive; font-size: 17px; color: #1f2a44; }
+
+  .approach ol {
+    margin: 5px 0 6px 20px;
+    padding: 0;
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: #222;
+  }
+  .approach li { margin-bottom: 2px; }
+
+  .when-use { font-size: 12.5px; color: #555; font-style: italic; margin-top: 2px; }
+
+  .complexity {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #204d20;
+    background: #e2f0e2;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-top: 3px;
+  }
+
+  .dryrun {
+    border: 1.5px solid #1f2a44;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #eef4ff;
+  }
+  .dryrun h2 { font-family: 'Gochi Hand', cursive; font-size: 22px; margin: 0 0 5px 0; color: #1f2a44; }
+  .dryrun-steps { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12.5px; }
+  .dryrun-step {
+    background: #fff;
+    border: 1px solid #b7c4dc;
+    border-radius: 6px;
+    padding: 4px 8px;
+    min-width: 130px;
+  }
+  .dryrun-step b { font-family: 'Gochi Hand', cursive; font-size: 15px; color: #a13f3f; }
+
+  .mid-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .code-section {
+    border: 1.5px solid #204d20;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #f0faf0;
+  }
+  .code-section h2 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 22px;
+    margin: 0 0 4px 0;
+    color: #204d20;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .code-block {
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 11.5px;
+    line-height: 1.45;
+    background: #1f2a44;
+    color: #e8ecf4;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin: 0 0 6px 0;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .code-block .kw { color: #7ec8e3; }
+  .code-block .ty { color: #f4c97a; }
+  .code-block .cm { color: #8a9bb8; font-style: italic; }
+  .code-note { font-size: 12px; color: #333; line-height: 1.35; }
+
+  .footer-row {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  .pitfalls {
+    border: 1.5px solid #c0392b;
+    border-radius: 8px;
+    padding: 8px 13px;
+    background: #fdeaea;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .pitfalls h2 { font-family: 'Gochi Hand', cursive; font-size: 21px; margin: 0 0 3px 0; color: #a13f3f; }
+  .pitfalls code { background: #fff; padding: 0 3px; border-radius: 3px; }
+
+  .tip {
+    border: 1.5px solid #7a4fa1;
+    border-radius: 8px;
+    padding: 8px 13px;
+    background: #f4ecfa;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .tip h2 { font-family: 'Gochi Hand', cursive; font-size: 21px; margin: 0 0 3px 0; color: #7a4fa1; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th, table td { border: 1px solid #999; padding: 4px 6px; text-align: center; }
+  table th { background: #1f2a44; color: #fff; font-family: 'Gochi Hand', cursive; font-size: 16px; }
+
+  .cmp-title { font-family: 'Gochi Hand', cursive; font-size: 21px; color: #1f2a44; margin: 0 0 4px 0; }
+  .star { color: #c0392b; }
+
+  .doodle { font-family: 'Gochi Hand', cursive; font-size: 14px; color: #7a8ba3; text-align: right; white-space: nowrap; }
+
+  @page { size: auto; margin: 8mm; }
+  @media print {
+    html, body { background: #fff; padding: 0; }
+    .page { box-shadow: none; border: none; max-width: 100%; min-height: 100vh; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="top-row">
+      <h1>200. Number of Islands</h1>
+      <div class="doodle">source: neetcode.io</div>
+    </div>
+    <div class="problem-link">🔗 <a href="https://leetcode.com/problems/number-of-islands/" target="_blank">leetcode.com/problems/number-of-islands</a></div>
+    <div class="subtitle">Count connected components of &apos;1&apos; cells using 4-directional adjacency only.</div>
+
+    <div class="statement">
+      Ex: 4&times;5 grid with four separate land blobs &rarr; 4 &nbsp;|&nbsp; m,n &le; 100, cells are &apos;0&apos; or &apos;1&apos; &nbsp;&nbsp;|&nbsp;&nbsp; Goal &rarr; <b>O(m&middot;n) time &amp; space</b>
+    </div>
+
+    <div class="prereq">
+      <b>Prereqs:</b> 2D grid traversal &bull; DFS/BFS connected-component flood fill &bull; Union-Find for merging adjacent land
+    </div>
+
+    <div class="grid">
+      <div class="approach">
+        <h2>1. Depth First Search <span class="badge">optimal</span></h2>
+        <div class="intuition"><b>Intuition:</b> Each unseen &apos;1&apos; starts a new island. DFS &quot;sinks&quot; that whole component by flipping land to water, so you never count the same island twice.</div>
+        <ol>
+          <li>Scan every cell (r, c).</li>
+          <li>On &apos;1&apos;: run DFS, then increment island count.</li>
+          <li>DFS: out of bounds or &apos;0&apos; &rarr; return; else set &apos;0&apos; and recurse 4 ways.</li>
+          <li>Return total count after full scan.</li>
+        </ol>
+        <span class="complexity">O(m&middot;n) time &middot; O(m&middot;n) space</span>
+        <div class="when-use">Use when: default interview answer&mdash;short, intuitive flood fill on a grid.</div>
+      </div>
+
+      <div class="approach">
+        <h2>2. Breadth First Search <span class="badge">linear</span></h2>
+        <div class="intuition"><b>Intuition:</b> Same connected-component idea, but expand layer-by-layer with a queue instead of recursion. Still mark each visited land cell as &apos;0&apos;.</div>
+        <ol>
+          <li>Scan grid; on &apos;1&apos;, start BFS and bump count.</li>
+          <li>Enqueue start cell; mark it &apos;0&apos; immediately.</li>
+          <li>Dequeue, push any unvisited land neighbors (mark &apos;0&apos; on enqueue).</li>
+          <li>Repeat until queue empty; continue scan.</li>
+        </ol>
+        <span class="complexity">O(m&middot;n) time &middot; O(m&middot;n) space</span>
+        <div class="when-use">Use when: avoiding recursion depth or you prefer iterative level-order expansion.</div>
+      </div>
+
+      <div class="approach">
+        <h2>3. Disjoint Set Union <span class="badge">union-find</span></h2>
+        <div class="intuition"><b>Intuition:</b> Count every land cell, then union with adjacent land neighbors. Each successful merge means two cells were one island&mdash;decrement the running total.</div>
+        <ol>
+          <li>Map (r,c) &rarr; index r&middot;cols+c; init DSU for m&middot;n cells.</li>
+          <li>For each &apos;1&apos;: islands++; check 4 neighbors.</li>
+          <li>If neighbor is land and union succeeds, islands&minus;&minus;.</li>
+          <li>Return final islands count.</li>
+        </ol>
+        <span class="complexity">O(m&middot;n) time &middot; O(m&middot;n) space</span>
+        <div class="when-use">Use when: dynamic connectivity pattern or interviewer asks for Union-Find.</div>
+      </div>
+    </div>
+
+    <div class="mid-row">
+      <div class="dryrun">
+        <h2>Dry Run &mdash; DFS on 4&times;5 grid (answer = 4)</h2>
+        <div class="dryrun-steps">
+          <div class="dryrun-step"><b>(0,0) land</b><br>DFS sinks top-left 2&times;2 block &rarr; count=1</div>
+          <div class="dryrun-step"><b>(0,4) land</b><br>DFS sinks right-column pair &rarr; count=2</div>
+          <div class="dryrun-step"><b>(2,2) land</b><br>Single cell DFS &rarr; count=3</div>
+          <div class="dryrun-step"><b>(3,3) land</b><br>DFS sinks bottom-right pair &rarr; count=4</div>
+          <div class="dryrun-step"><b>DFS detail</b><br>Visit (0,0): mark &apos;0&apos;, recurse to (0,1),(1,0),(1,1)&hellip;</div>
+          <div class="dryrun-step"><b>Done</b><br>All land flooded; return <b>4</b></div>
+        </div>
+      </div>
+
+      <div class="code-section">
+        <h2>Interview Code <span class="badge">C++ &middot; DFS</span></h2>
+        <pre class="code-block"><span class="kw">class</span> <span class="ty">Solution</span> {
+    <span class="ty">int</span> dirs[<span class="cm">4</span>][<span class="cm">2</span>] = {{<span class="cm">1</span>,<span class="cm">0</span>},{-<span class="cm">1</span>,<span class="cm">0</span>},{<span class="cm">0</span>,<span class="cm">1</span>},{<span class="cm">0</span>,-<span class="cm">1</span>}};
+<span class="kw">public</span>:
+    <span class="ty">int</span> numIslands(<span class="ty">vector</span>&lt;<span class="ty">vector</span>&lt;<span class="ty">char</span>&gt;&gt;&amp; grid) {
+        <span class="ty">int</span> rows = grid.size(), cols = grid[<span class="cm">0</span>].size(), islands = <span class="cm">0</span>;
+        <span class="kw">for</span> (<span class="ty">int</span> r = <span class="cm">0</span>; r &lt; rows; r++)
+            <span class="kw">for</span> (<span class="ty">int</span> c = <span class="cm">0</span>; c &lt; cols; c++)
+                <span class="kw">if</span> (grid[r][c] == <span class="cm">'1'</span>) { dfs(grid, r, c); islands++; }
+        <span class="kw">return</span> islands;
+    }
+    <span class="kw">void</span> dfs(<span class="ty">vector</span>&lt;<span class="ty">vector</span>&lt;<span class="ty">char</span>&gt;&gt;&amp; g, <span class="ty">int</span> r, <span class="ty">int</span> c) {
+        <span class="kw">if</span> (r&lt;<span class="cm">0</span>||c&lt;<span class="cm">0</span>||r&gt;=g.size()||c&gt;=g[<span class="cm">0</span>].size()||g[r][c]==<span class="cm">'0'</span>) <span class="kw">return</span>;
+        g[r][c] = <span class="cm">'0'</span>;
+        <span class="kw">for</span> (<span class="kw">auto</span>&amp; d : dirs) dfs(g, r+d[<span class="cm">0</span>], c+d[<span class="cm">1</span>]);
+    }
+};</pre>
+        <div class="code-note">
+          <b>Say in interview:</b> O(m&middot;n) visits each cell once. In-place &apos;0&apos; marking avoids extra visited set. 4-directional only&mdash;no diagonals. Check bounds before access.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <div class="pitfalls">
+        <h2>&#9888; Common Pitfalls</h2>
+        &bull; Forgetting to mark visited &rarr; infinite DFS/BFS loops.<br>
+        &bull; Incrementing count for every &apos;1&apos; instead of per new component.<br>
+        &bull; Using 8-directional (diagonal) neighbors&mdash;merges separate islands.
+      </div>
+
+      <div class="tip">
+        <h2>&#128161; Interview Tip</h2>
+        Frame it as &quot;count connected components.&quot; Code DFS first; mention BFS swap and Union-Find if asked. Sink cells in-place or use a visited set&mdash;state that choice aloud.
+      </div>
+
+      <div>
+        <p class="cmp-title">Quick Comparison</p>
+        <table>
+          <tr><th>Approach</th><th>Time</th><th>Space</th></tr>
+          <tr><td class="star">DFS &#9733;</td><td class="star">O(m&middot;n)</td><td class="star">O(m&middot;n)</td></tr>
+          <tr><td>BFS</td><td>O(m&middot;n)</td><td>O(m&middot;n)</td></tr>
+          <tr><td>Union-Find</td><td>O(m&middot;n)</td><td>O(m&middot;n)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

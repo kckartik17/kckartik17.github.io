@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1. Two Sum - Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Gochi+Hand&display=swap');
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: #d8d2c2;
+    font-family: 'Comic Neue', cursive;
+  }
+
+  body { padding: 18px; }
+
+  .page {
+    width: 100%;
+    max-width: 1100px;
+    min-height: 1300px;
+    margin: 0 auto;
+    background:
+      repeating-linear-gradient(#f7f3e8 0px, #f7f3e8 34px, #cfd8e8 35px);
+    background-color: #f7f3e8;
+    border: 1px solid #d8cfb8;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.15);
+    padding: 26px 34px 22px 62px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 44px;
+    width: 2px;
+    background: #e39a9a;
+    opacity: 0.6;
+  }
+
+  h1 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0;
+    color: #1f2a44;
+    text-decoration: underline;
+    text-decoration-color: #c0392b;
+    text-decoration-thickness: 3px;
+    display: inline-block;
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+  }
+
+  .problem-link { font-size: 15px; }
+  .problem-link a { color: #1a4fa0; text-decoration: underline; }
+
+  .subtitle { font-size: 16px; color: #444; margin: 4px 0 9px 0; }
+
+  .statement {
+    background: #fff8d6;
+    border: 1px solid #e3d68a;
+    border-radius: 6px;
+    padding: 7px 13px;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .prereq {
+    font-size: 14px;
+    background: #fff;
+    border: 1px dashed #999;
+    border-radius: 6px;
+    padding: 6px 13px;
+    margin-bottom: 12px;
+  }
+  .prereq b { font-family: 'Gochi Hand', cursive; font-size: 19px; color: #1f2a44; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 18px;
+    margin-bottom: 12px;
+  }
+
+  .approach {
+    border: 1.5px dashed #7a8ba3;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.35);
+  }
+
+  .approach h2 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 25px;
+    margin: 0 0 4px 0;
+    color: #a13f3f;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .badge {
+    font-family: 'Comic Neue', cursive;
+    font-size: 12px;
+    background: #1f2a44;
+    color: #fff;
+    padding: 1px 8px;
+    border-radius: 9px;
+  }
+
+  .intuition {
+    font-size: 14px;
+    color: #333;
+    background: #eef2f8;
+    border-left: 3px solid #7a8ba3;
+    padding: 5px 9px;
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
+  .intuition b { font-family: 'Gochi Hand', cursive; font-size: 17px; color: #1f2a44; }
+
+  .approach ol {
+    margin: 5px 0 6px 20px;
+    padding: 0;
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: #222;
+  }
+  .approach li { margin-bottom: 2px; }
+
+  .when-use { font-size: 12.5px; color: #555; font-style: italic; margin-top: 2px; }
+
+  .complexity {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #204d20;
+    background: #e2f0e2;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-top: 3px;
+  }
+
+  .dryrun {
+    border: 1.5px solid #1f2a44;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #eef4ff;
+  }
+  .dryrun h2 { font-family: 'Gochi Hand', cursive; font-size: 22px; margin: 0 0 5px 0; color: #1f2a44; }
+  .dryrun-steps { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12.5px; }
+  .dryrun-step {
+    background: #fff;
+    border: 1px solid #b7c4dc;
+    border-radius: 6px;
+    padding: 4px 8px;
+    min-width: 130px;
+  }
+  .dryrun-step b { font-family: 'Gochi Hand', cursive; font-size: 15px; color: #a13f3f; }
+
+  .mid-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .code-section {
+    border: 1.5px solid #204d20;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #f0faf0;
+  }
+  .code-section h2 {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 22px;
+    margin: 0 0 4px 0;
+    color: #204d20;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .code-block {
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 11.5px;
+    line-height: 1.45;
+    background: #1f2a44;
+    color: #e8ecf4;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin: 0 0 6px 0;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .code-block .kw { color: #7ec8e3; }
+  .code-block .ty { color: #f4c97a; }
+  .code-block .cm { color: #8a9bb8; font-style: italic; }
+  .code-note { font-size: 12px; color: #333; line-height: 1.35; }
+
+  .footer-row {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  .pitfalls {
+    border: 1.5px solid #c0392b;
+    border-radius: 8px;
+    padding: 8px 13px;
+    background: #fdeaea;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .pitfalls h2 { font-family: 'Gochi Hand', cursive; font-size: 21px; margin: 0 0 3px 0; color: #a13f3f; }
+  .pitfalls code { background: #fff; padding: 0 3px; border-radius: 3px; }
+
+  .tip {
+    border: 1.5px solid #7a4fa1;
+    border-radius: 8px;
+    padding: 8px 13px;
+    background: #f4ecfa;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .tip h2 { font-family: 'Gochi Hand', cursive; font-size: 21px; margin: 0 0 3px 0; color: #7a4fa1; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th, table td { border: 1px solid #999; padding: 4px 6px; text-align: center; }
+  table th { background: #1f2a44; color: #fff; font-family: 'Gochi Hand', cursive; font-size: 16px; }
+
+  .cmp-title { font-family: 'Gochi Hand', cursive; font-size: 21px; color: #1f2a44; margin: 0 0 4px 0; }
+  .star { color: #c0392b; }
+
+  .doodle { font-family: 'Gochi Hand', cursive; font-size: 14px; color: #7a8ba3; text-align: right; white-space: nowrap; }
+
+  @page { size: auto; margin: 8mm; }
+  @media print {
+    html, body { background: #fff; padding: 0; }
+    .page { box-shadow: none; border: none; max-width: 100%; min-height: 100vh; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="top-row">
+      <h1>1. Two Sum</h1>
+      <div class="doodle">source: neetcode.io</div>
+    </div>
+    <div class="problem-link">🔗 <a href="https://leetcode.com/problems/two-sum/" target="_blank">leetcode.com/problems/two-sum</a></div>
+    <div class="subtitle">Find two distinct indices whose values add up to target; return smaller index first.</div>
+
+    <div class="statement">
+      Ex: nums=[3,4,5,6], target=7 &rarr; [0,1] &nbsp;|&nbsp; [5,5], target=10 &rarr; [0,1] &nbsp;&nbsp;|&nbsp;&nbsp; 2 &le; n &le; 1000, exactly one answer &nbsp;&nbsp;|&nbsp;&nbsp; Goal &rarr; <b>O(n) time, O(n) space</b>
+    </div>
+
+    <div class="prereq">
+      <b>Prereqs:</b> Hash maps for complement lookup &bull; Two pointers after sorting &bull; Single-pass vs two-pass trade-offs
+    </div>
+
+    <div class="grid">
+      <div class="approach">
+        <h2>1. Brute Force <span class="badge">easiest</span></h2>
+        <div class="intuition"><b>Intuition:</b> Try every unordered pair (i, j) with i &lt; j. The moment their sum hits target, you have the answer&mdash;simple but quadratic.</div>
+        <ol>
+          <li>Outer loop i from 0 to n&minus;1.</li>
+          <li>Inner loop j from i+1 to n&minus;1.</li>
+          <li>If nums[i]+nums[j]==target, return [i, j].</li>
+        </ol>
+        <span class="complexity">O(n&sup2;) time &middot; O(1) space</span>
+        <div class="when-use">Use when: n is tiny or you need the most obvious starting point in an interview.</div>
+      </div>
+
+      <div class="approach">
+        <h2>2. Sorting + Two Pointers <span class="badge">n log n</span></h2>
+        <div class="intuition"><b>Intuition:</b> Sort (value, index) pairs, then squeeze from both ends. Low sum &rarr; move left up; high sum &rarr; move right down. Map back to original indices at the end.</div>
+        <ol>
+          <li>Build pairs (nums[i], i) and sort by value.</li>
+          <li>Set i=0, j=n&minus;1; while i&lt;j compare A[i]+A[j] to target.</li>
+          <li>Equal &rarr; return original indices (min first); else move i or j.</li>
+        </ol>
+        <span class="complexity">O(n log n) time &middot; O(n) space</span>
+        <div class="when-use">Use when: you want two-pointer practice or sorted input is already available.</div>
+      </div>
+
+      <div class="approach">
+        <h2>3. Hash Map (Two Pass) <span class="badge">linear</span></h2>
+        <div class="intuition"><b>Intuition:</b> Pre-load a map value&rarr;index, then scan again asking &quot;does target&minus;nums[i] exist at a different index?&quot; O(1) lookups replace nested loops.</div>
+        <ol>
+          <li>First pass: store every value with its index in a hash map.</li>
+          <li>Second pass: diff = target &minus; nums[i].</li>
+          <li>If diff in map and map[diff] &ne; i, return [i, map[diff]].</li>
+        </ol>
+        <span class="complexity">O(n) time &middot; O(n) space</span>
+        <div class="when-use">Use when: separating build vs query phases makes the logic clearer to explain.</div>
+      </div>
+
+      <div class="approach">
+        <h2>4. Hash Map (One Pass) <span class="badge">optimal</span></h2>
+        <div class="intuition"><b>Intuition:</b> For each element, check if its complement was seen earlier; if not, record the current value. Looking only backward guarantees i &ne; j without extra checks.</div>
+        <ol>
+          <li>Keep map prevMap: value &rarr; index (empty initially).</li>
+          <li>At i, diff = target &minus; nums[i].</li>
+          <li>If diff in prevMap, return [prevMap[diff], i].</li>
+          <li>Else prevMap[nums[i]] = i and continue.</li>
+        </ol>
+        <span class="complexity">O(n) time &middot; O(n) space</span>
+        <div class="when-use">Use when: you need the canonical interview answer&mdash;one scan, one map.</div>
+      </div>
+    </div>
+
+    <div class="mid-row">
+      <div class="dryrun">
+        <h2>Dry Run &mdash; One-Pass Map on nums=[2,7,11,15], target=9</h2>
+        <div class="dryrun-steps">
+          <div class="dryrun-step"><b>Start</b><br>prevMap = {}</div>
+          <div class="dryrun-step"><b>i=0, n=2</b><br>diff=7, not in map &rarr; prevMap={2:0}</div>
+          <div class="dryrun-step"><b>i=1, n=7</b><br>diff=2, found at index 0!</div>
+          <div class="dryrun-step"><b>Return</b><br>[0, 1] because 2+7=9</div>
+          <div class="dryrun-step"><b>Key idea</b><br>Check complement <em>before</em> inserting current value</div>
+          <div class="dryrun-step"><b>Duplicate case</b><br>[5,5], t=10: i=1 sees diff=5 already at 0</div>
+        </div>
+      </div>
+
+      <div class="code-section">
+        <h2>Interview Code <span class="badge">C++ &middot; One Pass</span></h2>
+        <pre class="code-block"><span class="kw">class</span> <span class="ty">Solution</span> {
+<span class="kw">public</span>:
+    <span class="ty">vector</span>&lt;<span class="ty">int</span>&gt; twoSum(<span class="ty">vector</span>&lt;<span class="ty">int</span>&gt;&amp; nums, <span class="ty">int</span> target) {
+        <span class="ty">unordered_map</span>&lt;<span class="ty">int</span>, <span class="ty">int</span>&gt; prevMap;
+        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="cm">0</span>; i &lt; nums.size(); i++) {
+            <span class="ty">int</span> diff = target - nums[i];
+            <span class="kw">if</span> (prevMap.count(diff))
+                <span class="kw">return</span> {prevMap[diff], i};
+            prevMap[nums[i]] = i;
+        }
+        <span class="kw">return</span> {};
+    }
+};</pre>
+        <div class="code-note">
+          <b>Say in interview:</b> O(n) single pass, O(n) map for complements. Check diff before inserting&mdash;avoids using the same index twice. Complement is target &minus; nums[i], not the reverse.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <div class="pitfalls">
+        <h2>&#9888; Common Pitfalls</h2>
+        &bull; Reusing the same index when <code>2*nums[i]==target</code>.<br>
+        &bull; Returning values instead of indices.<br>
+        &bull; Wrong complement: use <code>target - nums[i]</code>, not <code>nums[i] - target</code>.
+      </div>
+
+      <div class="tip">
+        <h2>&#128161; Interview Tip</h2>
+        Walk Brute Force &rarr; mention hash map idea &rarr; code one-pass. Briefly note sorting is O(n log n) and loses index order until you pair with indices. Exactly one answer is guaranteed.
+      </div>
+
+      <div>
+        <p class="cmp-title">Quick Comparison</p>
+        <table>
+          <tr><th>Approach</th><th>Time</th><th>Space</th></tr>
+          <tr><td>Brute Force</td><td>O(n&sup2;)</td><td>O(1)</td></tr>
+          <tr><td>Sort + 2 Ptr</td><td>O(n log n)</td><td>O(n)</td></tr>
+          <tr><td>Map Two Pass</td><td>O(n)</td><td>O(n)</td></tr>
+          <tr><td class="star">Map One Pass &#9733;</td><td class="star">O(n)</td><td class="star">O(n)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
