@@ -1029,6 +1029,20 @@ function recordOpen(slug) {
 }
 
 function openProblem(slug) {
+  // Check if user is logged in
+  if (!firebaseReady) {
+    alert("Firebase is not configured. You need to set up Firebase to access notes. Please refresh and try again.");
+    return;
+  }
+  
+  if (!currentUser) {
+    alert("Please sign in first to access the problem notes.");
+    // Auto-trigger the auth button if it exists
+    const authBtn = document.getElementById("auth-btn");
+    if (authBtn) authBtn.click();
+    return;
+  }
+  
   recordOpen(slug);
   window.location.href = href(slug);
 }
